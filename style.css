@@ -1,6 +1,8 @@
-html {
-    background-color: black;
-    color: white;
+@media (prefers-color-scheme: dark) {
+    html {
+        background-color: black;
+        color: white;
+    }
 }
 
 section {
