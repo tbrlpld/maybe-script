@@ -8,7 +8,7 @@ class MaybeScript extends HTMLElement {
     connectedCallback() {
         console.log("Custom element connected", this)
         this.hide()
-        this.showAfterDOMandDelay()
+        this.showAfterDelay()
     }
 
     hide() {
@@ -24,11 +24,6 @@ class MaybeScript extends HTMLElement {
     showAfterDelay()  {
         setTimeout(() => this.show(), 2000)
     }
-
-    showAfterDOMandDelay() {
-        document.addEventListener("DOMContentLoaded", () => this.showAfterDelay())
-    }
-
 }
 
 customElements.define("maybe-script", MaybeScript)
