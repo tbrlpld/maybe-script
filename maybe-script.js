@@ -9,6 +9,7 @@ class MaybeScript extends HTMLElement {
         console.log("Custom element connected", this)
         this.hide()
         this.showAfterDelay()
+        this.cancelShow()
     }
 
     hide() {
@@ -22,7 +23,21 @@ class MaybeScript extends HTMLElement {
     }
 
     showAfterDelay()  {
-        setTimeout(() => this.show(), 2000)
+        console.log("Set up to show after delay", this)
+        this.showTimeout = setTimeout(
+            () => {
+                console.log("Showing after delay", this)
+                this.show()
+            },
+            2000,
+        )
+    }
+
+    cancelShow() {
+        console.log("Don't show after delay anymore", this)
+        if (!this.showTimeout) return
+
+        clearTimeout(this.showTimeout)
     }
 }
 
