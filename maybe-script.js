@@ -17,6 +17,7 @@ class MaybeScript extends HTMLElement {
         // Hide the child elements
         for (const child of self.children) {
             console.log(child.tagName)
+            child.setAttribute("hidden", "true")
         }
     }
 }
