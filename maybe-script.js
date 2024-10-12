@@ -7,9 +7,7 @@ class MaybeScript extends HTMLElement {
 
     connectedCallback() {
         console.log("Custom element connected", this)
-        // When this element itself (the parent) is added to the DOM, the children are not constructed yet.
-        // Thus, we need to wait for the DOM to be loaded.
-        document.addEventListener("DOMContentLoaded", () =>  this.hide())
+        this.hide()
     }
 
     hide() {
