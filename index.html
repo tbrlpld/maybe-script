@@ -4,10 +4,13 @@
         <meta name=”viewport” content=”width=device-width,initial-scale=1”>
         <link rel="icon" href="data:,">
         <link rel="stylesheet" href="style.css">
-        <script src="main.js"></script>
+        <script src="maybe-script.js"></script>
+        <script src="main.js" defer></script>
     </head>
     <body>
         <h1>Hello</h1>
         <noscript>No script</noscript>
+        <div>Only show me when script did not load.</div>
+        <maybe-script></maybe-script>
     </body>
 </html>
