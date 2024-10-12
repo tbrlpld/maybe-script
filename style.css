@@ -2,3 +2,7 @@ html {
     background-color: black;
     color: white;
 }
+
+section {
+    margin: 1rem 0;
+}
