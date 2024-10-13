@@ -11,8 +11,10 @@ class MaybeScript extends HTMLElement {
         this.hide()
         this.updateDelayFromAttribute()
 
-        this.showAfterDelay()
-        this.cancelShow()
+        this.script = this.getScript()
+
+        // this.showAfterDelay()
+        // this.cancelShow()
     }
 
     hide() {
@@ -41,6 +43,14 @@ class MaybeScript extends HTMLElement {
         if (!this.showTimeout) return
 
         clearTimeout(this.showTimeout)
+    }
+
+    getScript() {
+        const src = this.getAttribute("src")
+        console.log(src)
+
+        const script = document.querySelector(`script[src="${src}"]`)
+        console.log(script)
     }
 
     updateDelayFromAttribute() {
