@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="style.css">
         <script src="maybe-script.js"></script>
         <script src="main.js" defer></script>
+        <script src="404-script.js" defer></script>
     </head>
     <body>
         <h1>Hello</h1>
@@ -23,9 +24,21 @@
         </section>
 
         <section>
-            <maybe-script delay="100">
-                <div>Another elemtent to hide in a different section of the page.</div>
+            <maybe-script src="404-script.js">
+                <div>The source does not exist, so this element should show.</div>
             </maybe-script>
         </section>
+
+        <section>
+            <maybe-script src="no-corresponding-script-tag.js">
+                <div>When there is no corresponding <code>&lt;script&gt;</code> tag, the content should show.</div>
+            </maybe-script>
+        </section>
+
+        <!-- <section> -->
+        <!--     <maybe-script delay="100"> -->
+        <!--         <div>Another elemtent to hide in a different section of the page.</div> -->
+        <!--     </maybe-script> -->
+        <!-- </section> -->
     </body>
 </html>

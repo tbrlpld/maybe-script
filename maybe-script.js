@@ -3,16 +3,17 @@ class MaybeScript extends HTMLElement {
         // Super constructor returns a reference to the element itself.
         super()
         console.log("Custom element constructed", this)
-        this.delay = 2000
+        // this.delay = 2000
     }
 
     connectedCallback() {
         console.log("Custom element connected", this)
         this.hide()
-        this.updateDelayFromAttribute()
 
-        this.script = this.getScript()
+        this.updateScriptFromAttribute()
+        this.showOnLoadingError()
 
+        // this.updateDelayFromAttribute()
         // this.showAfterDelay()
         // this.cancelShow()
     }
@@ -25,6 +26,29 @@ class MaybeScript extends HTMLElement {
     show() {
         console.log("Showing", this)
         this.removeAttribute("hidden")
+    }
+
+    showOnLoadingError() {
+        if (!this.script) {
+            console.log("No `<script>` with corresponding `src` found: ", this.getAttribute("src"))
+            this.show()
+            return
+        }
+
+        console.log("Adding script event listeners")
+        this.script.addEventListener(
+            "error",
+            (event) => {
+                console.log("Loading failed", event)
+                this.show()
+            }
+        )
+        this.script.addEventListener(
+            "load",
+            (event) => {
+                console.log("Loading success", event)
+            }
+        )
     }
 
     showAfterDelay()  {
@@ -45,12 +69,14 @@ class MaybeScript extends HTMLElement {
         clearTimeout(this.showTimeout)
     }
 
-    getScript() {
+    updateScriptFromAttribute() {
         const src = this.getAttribute("src")
         console.log(src)
 
         const script = document.querySelector(`script[src="${src}"]`)
         console.log(script)
+
+        this.script = script
     }
 
     updateDelayFromAttribute() {
