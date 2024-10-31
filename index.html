@@ -7,6 +7,8 @@
         <script src="maybe-script.js"></script>
         <script src="main.js" defer></script>
         <script src="404-script.js" defer></script>
+        <script src="undeferred.js"></script>
+        <script src="undeferred-404.js"></script>
     </head>
     <body>
         <h1>Hello</h1>
@@ -32,6 +34,21 @@
         <section>
             <maybe-script src="no-corresponding-script-tag.js">
                 <div>When there is no corresponding <code>&lt;script&gt;</code> tag, the content should show.</div>
+            </maybe-script>
+        </section>
+
+        <section>
+            <maybe-script src="undeferred.js">
+                <div>
+                    When the script is not deferred in the head, then it should already be loaded by the time the element is discovered.
+                    It should not be waiting for any events in this case.
+                    The content should never show.
+                </div>
+            </maybe-script>
+
+
+            <maybe-script src="undeferred-404.js">
+                <div>When the script is not deferred in the head, but there is an issue (like the source if not found) then the content should show.</div>
             </maybe-script>
         </section>
 
