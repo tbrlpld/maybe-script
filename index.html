@@ -5,6 +5,7 @@
         <link rel="icon" href="data:,">
         <link rel="stylesheet" href="style.css">
         <script src="maybe-script.js"></script>
+
         <script src="main.js" defer></script>
         <script src="404-script.js" defer></script>
         <script src="undeferred.js"></script>
@@ -19,21 +20,19 @@
 
         <section>
             <maybe-script src="main.js">
-                <div>Only show me when script did not load.</div>
-                <div>Same with me.</div>
-                <div>Well, it should also show when absolutely scripting is disabled all together.</div>
+                <div>When the script loads, then this <strong>should not show</strong>.</div>
             </maybe-script>
         </section>
 
         <section>
             <maybe-script src="404-script.js">
-                <div>There is a tag with the <code>src</code>, but the linked file does not exist, so this element should show.</div>
+                <div>When there is a tag with the <code>src</code>, but the source does not exist (404), so this content <strong>should show</strong>.</div>
             </maybe-script>
         </section>
 
         <section>
             <maybe-script src="no-corresponding-script-tag.js">
-                <div>When there is no corresponding <code>&lt;script&gt;</code> tag, the content should show.</div>
+                <div>When there is no corresponding <code>&lt;script&gt;</code> tag, the content <strong>should show</strong>.</div>
             </maybe-script>
         </section>
 
@@ -42,13 +41,14 @@
                 <div>
                     When the script is not deferred in the head, then it should already be loaded by the time the element is discovered.
                     It should not be waiting for any events in this case.
-                    The content should never show.
+                    The content <strong>should not show</strong>.
                 </div>
             </maybe-script>
+        </section>
 
-
+        <section>
             <maybe-script src="undeferred-404.js">
-                <div>When the script is not deferred in the head, but there is an issue (like the source if not found) then the content should show.</div>
+                <div>When the script is not deferred in the head, but there the source if not found (404) then the content <strong>should show</strong>.</div>
             </maybe-script>
         </section>
 
