@@ -10,8 +10,8 @@ class MaybeScript extends HTMLElement {
         console.log("Custom element connected", this)
         this.hide()
 
-        this.updateScriptFromAttribute()
-        this.showOnLoadingError()
+        // this.updateScriptFromAttribute()
+        // this.showOnLoadingError()
 
         // this.updateDelayFromAttribute()
         // this.showAfterDelay()
@@ -28,68 +28,98 @@ class MaybeScript extends HTMLElement {
         this.removeAttribute("hidden")
     }
 
-    showOnLoadingError() {
-        if (!this.script) {
-            console.log("No `<script>` with corresponding `src` found: ", this.getAttribute("src"))
-            this.show()
-            return
-        }
+    // showOnLoadingError() {
+    //     if (!this.script) {
+    //         console.log("No `<script>` with corresponding `src` found: ", this.getAttribute("src"))
+    //         this.show()
+    //         return
+    //     }
 
-        console.log("Adding script event listeners")
-        this.script.addEventListener(
-            "error",
-            (event) => {
-                console.log("Loading failed", event)
-                this.show()
-            }
-        )
-        this.script.addEventListener(
-            "load",
-            (event) => {
-                console.log("Loading success", event)
-            }
-        )
-    }
+    //     console.log("Adding script event listeners")
+    //     this.script.addEventListener(
+    //         "error",
+    //         (event) => {
+    //             console.log("Loading failed", event)
+    //             this.show()
+    //         }
+    //     )
+    //     this.script.addEventListener(
+    //         "load",
+    //         (event) => {
+    //             console.log("Loading success", event)
+    //         }
+    //     )
+    // }
 
-    showAfterDelay()  {
-        console.log("Set up to show after delay", this, this.delay)
-        this.showTimeout = setTimeout(
-            () => {
-                console.log("Showing after delay", this)
-                this.show()
-            },
-            this.delay,
-        )
-    }
+    // showAfterDelay()  {
+    //     console.log("Set up to show after delay", this, this.delay)
+    //     this.showTimeout = setTimeout(
+    //         () => {
+    //             console.log("Showing after delay", this)
+    //             this.show()
+    //         },
+    //         this.delay,
+    //     )
+    // }
 
-    cancelShow() {
-        console.log("Don't show after delay anymore", this)
-        if (!this.showTimeout) return
+    // cancelShow() {
+    //     console.log("Don't show after delay anymore", this)
+    //     if (!this.showTimeout) return
 
-        clearTimeout(this.showTimeout)
-    }
+    //     clearTimeout(this.showTimeout)
+    // }
 
-    updateScriptFromAttribute() {
-        const src = this.getAttribute("src")
-        console.log(src)
+    // updateScriptFromAttribute() {
+    //     const src = this.getAttribute("src")
+    //     console.log(src)
 
-        const script = document.querySelector(`script[src="${src}"]`)
-        console.log(script)
+    //     const script = document.querySelector(`script[src="${src}"]`)
+    //     console.log(script)
 
-        this.script = script
-    }
+    //     this.script = script
+    // }
 
-    updateDelayFromAttribute() {
-        const value = this.getAttribute("delay")
-        if (!value) return
+    // updateDelayFromAttribute() {
+    //     const value = this.getAttribute("delay")
+    //     if (!value) return
 
-        const delay = Number(value)
-        if (!delay && delay !== 0) return
+    //     const delay = Number(value)
+    //     if (!delay && delay !== 0) return
 
-        this.delay = delay
-    }
+    //     this.delay = delay
+    // }
 }
 
-customElements.define("maybe-script", MaybeScript)
+
+(() => {
+    console.log("maybe-script.js running")
+
+    customElements.define("maybe-script", MaybeScript)
+
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM Content Loaded")
+    })
+
+    if (window.maybeScript === undefined) {
+        window.maybeScript = {
+            states: new Map()
+        }
+    }
+
+    window.addEventListener("load", () => {
+        console.log("Everything Loaded")
+
+        const performanceObserver = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+                if (entry.initiatorType === "script") {
+                    window.maybeScript.states[entry.name] = entry.responseStatus
+                }
+            })
+        })
+        performanceObserver.observe({type: "resource", buffered: true})
+    })
+})();
+
+
 
 
