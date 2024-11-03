@@ -10,6 +10,26 @@ class MaybeScript extends HTMLElement {
         console.log("Custom element connected", this)
         this.hide()
 
+        // Get absolute URL from the `src` attribute.
+        // This is needed because the performance entries use the absolute URL.
+        this.src = this.getAttribute("src")
+        if (!this.src) return
+
+        const documentURL = new URL(document.URL)
+        const srcURL = new URL(this.src, documentURL.origin)
+        this.srcURL = srcURL.href
+
+        // How do we make sure this runs after the event listenr that adds the statuses?
+        // I guess we can use a custom event that is fired by  that status tracker.
+        window.addEventListener("load", () => {
+            console.log("Handling for elemnt after load", this)
+            const scriptState = this.getScriptStatus()
+            console.log(scriptState)
+            if (!MaybeScript.responseOk(scriptState)) {
+                this.show()
+            }
+        })
+
         // this.updateScriptFromAttribute()
         // this.showOnLoadingError()
 
@@ -26,6 +46,14 @@ class MaybeScript extends HTMLElement {
     show() {
         console.log("Showing", this)
         this.removeAttribute("hidden")
+    }
+
+    static responseOk(statusCode) {
+        return statusCode >= 200 && statusCode <300
+    }
+
+    getScriptStatus() {
+        return window.maybeScript.states[this.srcURL]
     }
 
     // showOnLoadingError() {

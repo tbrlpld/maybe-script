@@ -8,8 +8,9 @@
 
         <script src="main.js" defer></script>
         <script src="404-script.js" defer></script>
-        <script src="undeferred.js"></script>
-        <script src="undeferred-404.js"></script>
+        <script src="https://example.com/404-script-external.js" defer></script>
+        <!-- <script src="undeferred.js"></script> -->
+        <!-- <script src="undeferred-404.js"></script> -->
     </head>
     <body>
         <h1>Hello</h1>
@@ -31,26 +32,32 @@
         </section>
 
         <section>
-            <maybe-script src="no-corresponding-script-tag.js">
-                <div>When there is no corresponding <code>&lt;script&gt;</code> tag, the content <strong>should show</strong>.</div>
+            <maybe-script src="https://example.com/404-script-external.js">
+                <div>When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), so this content <strong>should show</strong>.</div>
             </maybe-script>
         </section>
 
-        <section>
-            <maybe-script src="undeferred.js">
-                <div>
-                    When the script is not deferred in the head, then it should already be loaded by the time the element is discovered.
-                    It should not be waiting for any events in this case.
-                    The content <strong>should not show</strong>.
-                </div>
-            </maybe-script>
-        </section>
+        <!-- <section> -->
+        <!--     <maybe-script src="no-corresponding-script-tag.js"> -->
+        <!--         <div>When there is no corresponding <code>&lt;script&gt;</code> tag, the content <strong>should show</strong>.</div> -->
+        <!--     </maybe-script> -->
+        <!-- </section> -->
 
-        <section>
-            <maybe-script src="undeferred-404.js">
-                <div>When the script is not deferred in the head, but there the source if not found (404) then the content <strong>should show</strong>.</div>
-            </maybe-script>
-        </section>
+        <!-- <section> -->
+        <!--     <maybe-script src="undeferred.js"> -->
+        <!--         <div> -->
+        <!--             When the script is not deferred in the head, then it should already be loaded by the time the element is discovered. -->
+        <!--             It should not be waiting for any events in this case. -->
+        <!--             The content <strong>should not show</strong>. -->
+        <!--         </div> -->
+        <!--     </maybe-script> -->
+        <!-- </section> -->
+
+        <!-- <section> -->
+        <!--     <maybe-script src="undeferred-404.js"> -->
+        <!--         <div>When the script is not deferred in the head, but there the source if not found (404) then the content <strong>should show</strong>.</div> -->
+        <!--     </maybe-script> -->
+        <!-- </section> -->
 
         <!-- <section> -->
         <!--     <maybe-script delay="100"> -->
