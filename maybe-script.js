@@ -25,18 +25,19 @@ function responseStatusOk(statusCode) {
 
 
 function setUpScriptStateReporting() {
-    window.addEventListener("load", () => {
-        console.log("Setting up reporting of script loading states")
-        const performanceObserver = new PerformanceObserver((list) => {
-            list.getEntries().forEach((entry) => {
-                if (entry.initiatorType === "script") {
-                    window.maybeScript.reportScriptState(entry.name, entry.responseStatus)
-                }
-            })
+    console.log("Setting up reporting of script loading states")
+    // The performance observer will run the registerd handler for resources added before this point and for new ones.
+    // This means we can set this up immediately.
+
+    const performanceObserver = new PerformanceObserver((list) => {
+        list.getEntries().forEach((entry) => {
+            if (entry.initiatorType === "script") {
+                window.maybeScript.reportScriptState(entry.name, entry.responseStatus)
+            }
         })
-        // Buffered makes sure we get historic entires
-        performanceObserver.observe({type: "resource", buffered: true})
     })
+    // Buffered makes sure we get historic entires
+    performanceObserver.observe({type: "resource", buffered: true})
 }
 
 
@@ -100,7 +101,6 @@ class MaybeScript extends HTMLElement {
 
         // If the script loaded ok, we don't do anything
         if (responseStatusOk(status)) return
-
 
         this.show()
     }
