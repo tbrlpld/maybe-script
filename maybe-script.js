@@ -13,8 +13,18 @@ function main() {
 
 
 function createRegister() {
-    if (window.maybeScript === undefined) {
+    if (!isRegisterSetUp()) {
+        console.log("Setting up register")
         window.maybeScript = new Register()
+    }
+}
+
+
+function isRegisterSetUp() {
+    try {
+        return window.maybeScript instanceof Register
+    } catch {
+        return false
     }
 }
 
@@ -28,6 +38,10 @@ function setUpScriptStateReporting() {
     console.log("Setting up reporting of script loading states")
     // The performance observer will run the registerd handler for resources added before this point and for new ones.
     // This means we can set this up immediately.
+
+    if (!isRegisterSetUp()) {
+        throw MaybeScriptRegisterNotSetUp()
+    }
 
     const performanceObserver = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
@@ -86,9 +100,8 @@ class MaybeScript extends HTMLElement {
     connectedCallback() {
         console.log("Custom element connected", this)
 
-        if (window.maybeScript === undefined) {
-            console.error("No maybeScript register found.")
-            return
+        if (!isRegisterSetUp()) {
+            throw MaybeScriptRegisterNotSetUp()
         }
 
         this.hide()
@@ -113,6 +126,13 @@ class MaybeScript extends HTMLElement {
     show() {
         console.log("Showing", this)
         this.removeAttribute("hidden")
+    }
+}
+
+
+class MaybeScriptRegisterNotSetUp extends Error {
+    constructor(message, options) {
+        super(message, options);
     }
 }
 
