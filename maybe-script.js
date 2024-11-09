@@ -52,7 +52,7 @@ function setUpScriptStateReporting() {
     const performanceObserver = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry) => {
             if (entry.initiatorType === "script") {
-                window.maybeScript.reportScriptState(entry.name, entry.responseStatus)
+                window.maybeScript.registerScriptStatus(entry.name, entry.responseStatus)
             }
         })
     })
@@ -69,6 +69,8 @@ class Register {
     }
 
     registerCustomElement(maybeScript) {
+        console.log("Registering custom element", maybeScript)
+
         // Convert the `src` to an absolute URL.
         // This is needed because the performance entries use the absolute URL.
         const scriptURL = this.getAbsoluteSource(maybeScript)
@@ -82,7 +84,11 @@ class Register {
         entry.elements.push(maybeScript)
         this.map.set(scriptURL, entry)
 
-        console.log("Registered custom element", maybeScript)
+
+        if (entry.status !== undefined) {
+            // If we already have a status, we update the new element with that.
+            maybeScript.updateForScriptStatus(entry.status)
+        }
     }
 
     getAbsoluteSource(maybeScript){
@@ -95,7 +101,7 @@ class Register {
         return srcURL.href
     }
 
-    reportScriptState(scriptURL, status) {
+    registerScriptStatus(scriptURL, status) {
         console.log("Reporting script status", scriptURL, status)
 
         let entry = this.map.get(scriptURL)
