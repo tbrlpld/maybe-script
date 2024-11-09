@@ -55,7 +55,19 @@ tr {
             </tr>
             <tr>
                 <td>
-                    When there is a tag with the <code>src</code>, but the source does not exist (404), this content should show.
+                    When the script is not deferred in the head, then it should already be loaded by the time the element is discovered, this should not show.
+                </td>
+                <td>
+                </td>
+                <td>
+                    <maybe-script src="undeferred.js">
+                        ❌
+                    </maybe-script>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    When there is a tag with the <code>src</code>, but the source does not exist (404), this should show.
                 </td>
                 <td>
                     ✅
@@ -68,7 +80,7 @@ tr {
             </tr>
             <tr>
                 <td>
-                    When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), this content should show.
+                    When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), this should show.
                 </td>
                 <td>
                     ✅
@@ -89,19 +101,6 @@ tr {
                 <td>
                     <maybe-script src="no-corresponding-script-tag.js">
                         ✅
-                    </maybe-script>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    When the script is not deferred in the head, then it should already be loaded by the time the element is discovered.
-                    The content should not show.
-                </td>
-                <td>
-                </td>
-                <td>
-                    <maybe-script src="undeferred.js">
-                        ❌
                     </maybe-script>
                 </td>
             </tr>
