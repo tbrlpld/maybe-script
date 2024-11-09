@@ -4,6 +4,9 @@ console.log("maybe-script.js running")
 
 
 function main() {
+    document.addEventListener("DOMContentLoaded", () => { console.log("DOMContentLoaded")})
+    window.addEventListener("load", () => { console.log("load")})
+
     createRegister()
 
     customElements.define("maybe-script", MaybeScript)
@@ -38,6 +41,7 @@ function setUpScriptStateReporting() {
     console.log("Setting up reporting of script loading states")
     // The performance observer will run the registerd handler for resources added before this point and for new ones.
     // This means we can set this up immediately.
+    // TODO: What about custom elements that have not been added yet, when the status is reported?
 
     if (!isRegisterSetUp()) {
         throw MaybeScriptRegisterNotSetUp()
@@ -61,16 +65,17 @@ class Register {
     }
 
     addCustomElement(maybeScript) {
-        // Get absolute URL from the `src` attribute.
-        // This is needed because the performance entries use the absolute URL.
+        // Get the `src` attribute.
         const src = maybeScript.getAttribute("src")
         if (!src) return
 
+        // Convert the `src` to an absolute URL.
+        // This is needed because the performance entries use the absolute URL.
         const documentURL = new URL(document.URL)
         const srcURL = new URL(src, documentURL.origin)
         const absoluteSrcHref = srcURL.href
 
-
+        // Add the custom element to the array of elements interested in this `src`.
         let customElements = this.map.get(absoluteSrcHref)
         if (customElements === undefined) {
             customElements = []
