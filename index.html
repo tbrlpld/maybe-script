@@ -9,7 +9,8 @@
         <script src="main.js" defer></script>
         <script src="404-script.js" defer></script>
         <script src="https://example.com/404-script-external.js" defer></script>
-        <!-- <script src="undeferred.js"></script> -->
+
+        <script src="undeferred.js"></script>
         <!-- <script src="undeferred-404.js"></script> -->
         <style>
 table {
@@ -91,19 +92,21 @@ tr {
                     </maybe-script>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    When the script is not deferred in the head, then it should already be loaded by the time the element is discovered.
+                    The content should not show.
+                </td>
+                <td>
+                </td>
+                <td>
+                    <maybe-script src="undeferred.js">
+                        ❌
+                    </maybe-script>
+                </td>
+            </tr>
         </table>
 
-
-
-        <!-- <section> -->
-        <!--     <maybe-script src="undeferred.js"> -->
-        <!--         <div> -->
-        <!--             When the script is not deferred in the head, then it should already be loaded by the time the element is discovered. -->
-        <!--             It should not be waiting for any events in this case. -->
-        <!--             The content <strong>should not show</strong>. -->
-        <!--         </div> -->
-        <!--     </maybe-script> -->
-        <!-- </section> -->
 
         <!-- <section> -->
         <!--     <maybe-script src="undeferred-404.js"> -->
