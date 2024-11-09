@@ -68,33 +68,52 @@ class Register {
         this.map = new Map()
     }
 
-    addCustomElement(maybeScript) {
-        // Get the `src` attribute.
+    registerCustomElement(maybeScript) {
+        // Convert the `src` to an absolute URL.
+        // This is needed because the performance entries use the absolute URL.
+        const scriptURL = this.getAbsoluteSource(maybeScript)
+        if (!scriptURL) return
+
+        // Add the custom element to the array of elements interested in this scriptURL.
+        let entry = this.map.get(scriptURL)
+        if (entry === undefined) {
+            entry = new RegisterEntry()
+        }
+        entry.elements.push(maybeScript)
+        this.map.set(scriptURL, entry)
+
+        console.log("Registered custom element", maybeScript)
+    }
+
+    getAbsoluteSource(maybeScript){
         const src = maybeScript.getAttribute("src")
         if (!src) return
 
-        // Convert the `src` to an absolute URL.
-        // This is needed because the performance entries use the absolute URL.
         const documentURL = new URL(document.URL)
         const srcURL = new URL(src, documentURL.origin)
-        const absoluteSrcHref = srcURL.href
 
-        // Add the custom element to the array of elements interested in this `src`.
-        let customElements = this.map.get(absoluteSrcHref)
-        if (customElements === undefined) {
-            customElements = []
-        }
-        customElements.push(maybeScript)
-        this.map.set(absoluteSrcHref, customElements)
+        return srcURL.href
     }
 
     reportScriptState(scriptURL, status) {
         console.log("Reporting script status", scriptURL, status)
 
-        const customElements = this.map.get(scriptURL)
-        if (customElements === undefined) return
+        let entry = this.map.get(scriptURL)
+        if (entry === undefined) {
+            entry = new RegisterEntry()
+        }
+        entry.status = status
+        this.map.set(scriptURL, entry)
 
-        customElements.forEach((ce) => ce.updateForScriptStatus(status))
+        entry.elements.forEach((ce) => ce.updateForScriptStatus(status))
+    }
+}
+
+
+class RegisterEntry {
+    constructor() {
+        this.status = undefined
+        this.elements = []
     }
 }
 
@@ -115,7 +134,7 @@ class MaybeScript extends HTMLElement {
 
         this.hide()
 
-        window.maybeScript.addCustomElement(this)
+        window.maybeScript.registerCustomElement(this)
     }
 
     updateForScriptStatus(status) {
