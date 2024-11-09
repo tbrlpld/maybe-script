@@ -11,9 +11,7 @@ function main() {
 
     customElements.define("maybe-script", MaybeScript)
 
-    // Setting up the reporting after content is loaded.
-    // This is to make sure that the custom elements had time to register their interest.
-    document.addEventListener("DOMContentLoaded", () => {setUpScriptStateReporting()})
+    setUpScriptStateReporting()
 }
 
 
@@ -43,7 +41,6 @@ function setUpScriptStateReporting() {
     console.log("Setting up reporting of script loading states")
     // The performance observer will run the registerd handler for resources added before this point and for new ones.
     // This means we can set this up immediately.
-    // TODO: What about custom elements that have not been added yet, when the status is reported?
 
     if (!isRegisterSetUp()) {
         throw MaybeScriptRegisterNotSetUp()
