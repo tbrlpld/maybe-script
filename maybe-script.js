@@ -88,16 +88,6 @@ class Register {
         }
     }
 
-    getAbsoluteSource(maybeScript){
-        const src = maybeScript.getAttribute("src")
-        if (!src) return
-
-        const documentURL = new URL(document.URL)
-        const srcURL = new URL(src, documentURL.origin)
-
-        return srcURL.href
-    }
-
     registerScriptStatus(scriptURL, status) {
         console.log("Reporting script status", scriptURL, status)
 
@@ -109,6 +99,16 @@ class Register {
         this.map.set(scriptURL, entry)
 
         entry.elements.forEach((ce) => ce.updateForScriptStatus(status))
+    }
+
+    getAbsoluteSource(maybeScript){
+        const src = maybeScript.getAttribute("src")
+        if (!src) return
+
+        const documentURL = new URL(document.URL)
+        const srcURL = new URL(src, documentURL.origin)
+
+        return srcURL.href
     }
 }
 
