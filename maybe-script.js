@@ -11,7 +11,9 @@ function main() {
 
     customElements.define("maybe-script", MaybeScript)
 
-    setUpScriptStateReporting()
+    // Setting up the reporting after content is loaded.
+    // This is to make sure that the custom elements had time to register their interest.
+    document.addEventListener("DOMContentLoaded", () => {setUpScriptStateReporting()})
 }
 
 
