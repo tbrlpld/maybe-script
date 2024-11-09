@@ -81,9 +81,8 @@ class Register {
         entry.elements.push(maybeScript)
         this.map.set(scriptURL, entry)
 
-
+        // If we already have a status, we update the new element with that.
         if (entry.status !== undefined) {
-            // If we already have a status, we update the new element with that.
             maybeScript.updateForScriptStatus(entry.status)
         }
     }
