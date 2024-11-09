@@ -56,6 +56,8 @@ function setUpScriptStateReporting() {
     })
     // Buffered makes sure we get historic entires
     performanceObserver.observe({type: "resource", buffered: true})
+
+    console.log("Setting up reporting of script loading states -- DONE")
 }
 
 
