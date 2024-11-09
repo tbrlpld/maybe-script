@@ -11,31 +11,75 @@
         <script src="https://example.com/404-script-external.js" defer></script>
         <!-- <script src="undeferred.js"></script> -->
         <!-- <script src="undeferred-404.js"></script> -->
+        <style>
+table {
+    text-align: left;
+}
+tr {
+    border-bottom-width: 1px;
+}
+        </style>
     </head>
     <body>
         <h1>Hello</h1>
 
-        <section>
-            <noscript>No script</noscript>
-        </section>
 
-        <section>
-            <maybe-script src="main.js">
-                <div>When the script loads, then this <strong>should not show</strong>.</div>
-            </maybe-script>
-        </section>
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Expected</td>
+                <th>Actual</th>
+            </tr>
+            <tr>
+                <td>
+                    When JavaScript is available, this should not show.
+                </td>
+                <td></td>
+                <td>
+                    <noscript>
+                        ❌
+                    </noscript>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    When the script loads successfully, this should not show.
+                </td>
+                <td></td>
+                <td>
+                    <maybe-script src="main.js">
+                        ❌
+                    </maybe-script>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    When there is a tag with the <code>src</code>, but the source does not exist (404), this content should show.
+                </td>
+                <td>
+                    ✅
+                </td>
+                <td>
+                    <maybe-script src="404-script.js">
+                        ✅
+                    </maybe-script>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), this content should show.
+                </td>
+                <td>
+                    ✅
+                </td>
+                <td>
+                    <maybe-script src="https://example.com/404-script-external.js">
+                        ✅
+                    </maybe-script>
+                </td>
+            </tr>
+        </table>
 
-        <section>
-            <maybe-script src="404-script.js">
-                <div>When there is a tag with the <code>src</code>, but the source does not exist (404), so this content <strong>should show</strong>.</div>
-            </maybe-script>
-        </section>
-
-        <section>
-            <maybe-script src="https://example.com/404-script-external.js">
-                <div>When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), so this content <strong>should show</strong>.</div>
-            </maybe-script>
-        </section>
 
         <!-- <section> -->
         <!--     <maybe-script src="no-corresponding-script-tag.js"> -->
