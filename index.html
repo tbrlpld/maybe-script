@@ -8,17 +8,23 @@
 
         <script src="main.js" defer></script>
         <script src="404-script.js" defer></script>
-        <script src="https://example.com/404-script-external.js" defer></script>
 
         <script src="undeferred.js"></script>
         <!-- <script src="undeferred-404.js"></script> -->
+
+        <!-- External -->
+        <script src="https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+        <script src="https://example.com/404-script-external.js" defer></script>
+        <!-- This is redirected. -->
+        <!-- <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script> -->
+
         <style>
-table {
-    text-align: left;
-}
-tr {
-    border-bottom-width: 1px;
-}
+            table {
+                text-align: left;
+            }
+            tr {
+                border-bottom-width: 1px;
+            }
         </style>
     </head>
     <body>

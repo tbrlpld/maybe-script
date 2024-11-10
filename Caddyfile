@@ -6,6 +6,7 @@ http://localhost:8000 {
     root * .
 	file_server
     header {
-        Cache-Control no-cache
+        Cache-Control "no-cache"
+        Content-Security-Policy "script-src 'self' unpkg.com example.com; style-src: 'unsafe-inline';"
     }
 }
