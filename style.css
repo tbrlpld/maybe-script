@@ -8,3 +8,8 @@
 section {
     margin: 1rem 0;
 }
+
+.important-banner {
+    padding: 2rem;
+    background-color: tomato;
+}
