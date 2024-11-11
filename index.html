@@ -119,13 +119,35 @@
             <h2>Examples</h2>
             <h3>Disclosure</h3>
             <div>
-                <button data-disclosure data-disclosure-toggles="example-1">Toggle</button>
-                <div class="important-banner" data-disclosure-content="example-1">
-                    <p>
-                        This is some
-                    </p>
+
+
+                <div class="two-col">
+                    <div>
+                        Without
+                    </div>
+                    <div>
+                        With
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div>
+                        <button data-disclosure data-disclosure-toggles="example-1">Toggle</button>
+                        <p class="important-banner" data-disclosure-content="example-1">
+                            This is some content.
+                        </p>
+                    </div>
+                    <div>
+                        <button data-disclosure data-disclosure-toggles="example-2">Toggle</button>
+                        <!-- Since we hide and show this one with JS, we only need the delay for the content. -->
+                        <maybe-script src="main.js">
+                            <p class="important-banner" data-disclosure-content="example-2">
+                                This is some conent.
+                            </p>
+                        </maybe-script>
+                    </div>
                 </div>
             </div>
+
         </section>
 
 

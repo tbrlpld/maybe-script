@@ -13,3 +13,12 @@ section {
     padding: 2rem;
     background-color: tomato;
 }
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.hidden {
+    display: none;
+}

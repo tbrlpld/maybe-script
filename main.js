@@ -36,6 +36,8 @@ class Disclosure extends Component {
         this.content = document.querySelector(contentSelector)
         if (!this.content) return
 
+        this.hiddenClass = "hidden"
+
         this.button.addEventListener("click", () => {this.toggle()})
         this.hide()
     }
@@ -50,16 +52,16 @@ class Disclosure extends Component {
 
     hide () {
         console.debug("Hiding", this.content)
-        this.content.setAttribute("hidden", "")
+        this.content.classList.add(this.hiddenClass)
     }
 
     show () {
         console.debug("Showing", this.content)
-        this.content.removeAttribute("hidden")
+        this.content.classList.remove(this.hiddenClass)
     }
 
     isHidden () {
-        return this.content.getAttribute("hidden") !== null
+        return this.content.classList.contains(this.hiddenClass)
     }
 }
 
