@@ -31,86 +31,101 @@
         <h1>Hello</h1>
 
 
-        <table>
-            <tr>
-                <th>Description</th>
-                <th>Expected</td>
-                <th>Actual</th>
-            </tr>
-            <tr>
-                <td>
-                    When JavaScript is available, this should not show.
-                </td>
-                <td></td>
-                <td>
-                    <noscript>
-                        ❌
-                    </noscript>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    When the script loads successfully, this should not show.
-                </td>
-                <td></td>
-                <td>
-                    <maybe-script src="main.js">
-                        ❌
-                    </maybe-script>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    When the script is not deferred in the head, then it should already be loaded by the time the element is discovered, this should not show.
-                </td>
-                <td>
-                </td>
-                <td>
-                    <maybe-script src="undeferred.js">
-                        ❌
-                    </maybe-script>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    When there is a tag with the <code>src</code>, but the source does not exist (404), this should show.
-                </td>
-                <td>
-                    ✅
-                </td>
-                <td>
-                    <maybe-script src="404-script.js">
+        <section>
+            <h2>Tests</h2>
+            <table>
+                <tr>
+                    <th>Description</th>
+                    <th>Expected</td>
+                    <th>Actual</th>
+                </tr>
+                <tr>
+                    <td>
+                        When JavaScript is available, this should not show.
+                    </td>
+                    <td></td>
+                    <td>
+                        <noscript>
+                            ❌
+                        </noscript>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When the script loads successfully, this should not show.
+                    </td>
+                    <td></td>
+                    <td>
+                        <maybe-script src="main.js">
+                            ❌
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When the script is not deferred in the head, then it should already be loaded by the time the element is discovered, this should not show.
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <maybe-script src="undeferred.js">
+                            ❌
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When there is a tag with the <code>src</code>, but the source does not exist (404), this should show.
+                    </td>
+                    <td>
                         ✅
-                    </maybe-script>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), this should show.
-                </td>
-                <td>
-                    ✅
-                </td>
-                <td>
-                    <maybe-script src="https://unpkg.com/htmx.org@404">
+                    </td>
+                    <td>
+                        <maybe-script src="404-script.js">
+                            ✅
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When there is a tag with the <code>src</code> (which is external), but the source does not exist (404), this should show.
+                    </td>
+                    <td>
                         ✅
-                    </maybe-script>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    When there is no corresponding <code>&lt;script&gt;</code> tag, the content should show.
-                </td>
-                <td>
-                    ✅
-                </td>
-                <td>
-                    <maybe-script src="no-corresponding-script-tag.js">
+                    </td>
+                    <td>
+                        <maybe-script src="https://unpkg.com/htmx.org@404">
+                            ✅
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When there is no corresponding <code>&lt;script&gt;</code> tag, the content should show.
+                    </td>
+                    <td>
                         ✅
-                    </maybe-script>
-                </td>
-            </tr>
-        </table>
+                    </td>
+                    <td>
+                        <maybe-script src="no-corresponding-script-tag.js">
+                            ✅
+                        </maybe-script>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Examples</h2>
+            <h3>Disclosure</h3>
+            <div>
+                <div data-disclosure>
+                    <p>
+                        This is some
+                    </p>
+                </div>
+            </div>
+        </section>
 
 
         <!-- <section> -->
