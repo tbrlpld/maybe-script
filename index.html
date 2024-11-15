@@ -19,6 +19,9 @@
         <!-- <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script> -->
     </head>
     <body>
+        <nav>
+            <a href="examples.html">Examples</a>
+        </nav>
         <h1>Hello</h1>
 
 
@@ -105,42 +108,6 @@
                 </tr>
             </table>
         </section>
-
-        <section>
-            <h2>Examples</h2>
-            <h3>Disclosure</h3>
-            <div>
-
-
-                <div class="two-col">
-                    <div>
-                        Without
-                    </div>
-                    <div>
-                        With
-                    </div>
-                </div>
-                <div class="two-col">
-                    <div>
-                        <button data-disclosure data-disclosure-toggles="example-1">Toggle</button>
-                        <p class="important-banner" data-disclosure-content="example-1">
-                            This is some content.
-                        </p>
-                    </div>
-                    <div>
-                        <button data-disclosure data-disclosure-toggles="example-2">Toggle</button>
-                        <!-- Since we hide and show this one with JS, we only need the delay for the content. -->
-                        <maybe-script src="main.js">
-                            <p class="important-banner" data-disclosure-content="example-2">
-                                This is some conent.
-                            </p>
-                        </maybe-script>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
 
         <!-- <section> -->
         <!--     <maybe-script src="undeferred-404.js"> -->
