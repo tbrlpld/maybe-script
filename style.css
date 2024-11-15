@@ -9,6 +9,14 @@ section {
     margin: 1rem 0;
 }
 
+table {
+    text-align: left;
+}
+
+tr {
+    border-bottom-width: 1px;
+}
+
 .important-banner {
     padding: 2rem;
     background-color: tomato;
