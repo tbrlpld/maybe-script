@@ -31,3 +31,8 @@ table.two-col{
 .hidden {
     display: none;
 }
+
+.example-display {
+    padding: 1rem;
+    border: 1px solid white;
+}
