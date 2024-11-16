@@ -22,7 +22,7 @@
                 With <code>&lt;maybe-script&gt;</code>
             </div>
 
-            <h2 class="span-2">Superceded HTML controls</h2>
+            <h2 class="span-2">Superseded HTML controls</h2>
 
             <div>
                 <p>
@@ -50,14 +50,20 @@
                     We only want the button to be available when the script did not enhance the form to submit automatically.
                 </p>
             </div>
+
             <div class="example-display">
                 <form action="" method="get">
                     <input type="search" name="q" data-submit-on-blur>
                     <button type="submit">Search</button>
                 </form>
             </div>
-
-            <div>
+            <div class="example-display">
+                <form action="" method="get">
+                    <input type="search" name="q" data-submit-on-blur>
+                    <maybe-script src="main.js">
+                        <button type="submit">Search</button>
+                    </maybe-script>
+                </form>
             </div>
 
             <h2 class="span-2">Disclosure content</h2>
