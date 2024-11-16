@@ -13,6 +13,11 @@ table {
     text-align: left;
 }
 
+h2 {
+    margin-top: 2rem;
+    margin-bottom: .5rem;
+}
+
 .two-col-grid {
     width: 100%;
     display: grid;
