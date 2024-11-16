@@ -13,18 +13,19 @@ table {
     text-align: left;
 }
 
-tr {
-    border-bottom-width: 1px;
+table.two-col{
+    width: 100%;
+
+    tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%
+    }
 }
 
 .important-banner {
     padding: 2rem;
     background-color: tomato;
-}
-
-.two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
 }
 
 .hidden {
