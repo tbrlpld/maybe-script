@@ -30,7 +30,7 @@
                 </p>
                 <p>
                     Consider a filter or search form.
-                    For the HTML implementation, you need there to be a "submit" button so that the form can be sent to the server.
+                    For the HTML implementation, you want there to be a "submit" button so that the form can be sent to the server.
                 </p>
                 <p>
                     However, when the form is enhanced with functionality that automatically submits the form and updates the results list, the "submit" button is now superfluous.
@@ -49,6 +49,15 @@
                 <p>
                     We only want the button to be available when the script did not enhance the form to submit automatically.
                 </p>
+            </div>
+            <div class="example-display">
+                <form action="" method="get">
+                    <input type="search" name="q" data-submit-on-blur>
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+
+            <div>
             </div>
 
             <h2 class="span-2">Disclosure content</h2>

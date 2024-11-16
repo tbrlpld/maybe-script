@@ -4,6 +4,7 @@ function main() {
 
     console.log("Hello from main() function")
     Disclosure.init()
+    SubmitOnBlur.init()
 }
 
 
@@ -62,6 +63,23 @@ class Disclosure extends Component {
 
     isHidden () {
         return this.content.classList.contains(this.hiddenClass)
+    }
+}
+
+class SubmitOnBlur extends Component {
+    static selector () {return "[data-submit-on-blur]"}
+
+    constructor(elem) {
+        super()
+
+        this.input = elem
+        this.form = this.input.closest("form")
+
+        this.input.addEventListener("blur", () => {this.form.submit()})
+        this.input.setAttribute("placeholder", "Submits on blur, sorry.")
+
+        this.button = this.form.querySelector("button[type='submit']")
+        this.button.remove()
     }
 }
 
