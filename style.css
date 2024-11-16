@@ -36,4 +36,8 @@ table {
 .example-display {
     padding: 1rem;
     border: 1px solid white;
+
+    /* In the grid, don't stretch these. That should make is visually clearer which elements create shift and which don't */
+    justify-self: start;
+    align-self: start;
 }
