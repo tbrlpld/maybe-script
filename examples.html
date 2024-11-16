@@ -14,99 +14,87 @@
         </nav>
         <h1>Examples</h1>
 
-        <table class="two-col">
-            <tr>
-                <th scope="col">
-                    Without <code>&lt;maybe-script&gt;</code>
-                </th>
-                <th scope="col">
-                    With <code>&lt;maybe-script&gt;</code>
-                </th>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <hr>
-                    <strong>Superceded HTML controls</strong>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>
-                        When we enhance some existing HTML functionality with dynamic behavior, some of the HTML elements are not needed anymore.
+        <div class="two-col-grid">
+            <div>
+                Without <code>&lt;maybe-script&gt;</code>
+            </div>
+            <div>
+                With <code>&lt;maybe-script&gt;</code>
+            </div>
+
+            <h2 class="span-2">Superceded HTML controls</h2>
+
+            <div>
+                <p>
+                    When we enhance some existing HTML functionality with dynamic behavior, some of the HTML elements are not needed anymore.
+                </p>
+                <p>
+                    Consider a filter or search form.
+                    For the HTML implementation, you need there to be a "submit" button so that the form can be sent to the server.
+                </p>
+                <p>
+                    However, when the form is enhanced with functionality that automatically submits the form and updates the results list, the "submit" button is now superfluous.
+                    Even worse, it may even confuse users.
+                    The existence of the button might distract them from the fact that the results have already been updated.
+                </p>
+                <p>
+                    You can add the removal of the button to the script behavior.
+                    However, when JS is slow to load and execute, we get a layout shift from the disappearing button.
+                </p>
+            </div>
+            <div>
+                <p>
+                    We want to avoid the layout shift caused by the disappearing button.
+                </p>
+                <p>
+                    We only want the button to be available when the script did not enhance the form to submit automatically.
+                </p>
+            </div>
+
+            <h2 class="span-2">Disclosure content</h2>
+
+            <div>
+                <p>
+                    The content is rendered normally into the page.
+                    When JS is loaded and run successfully then it hides the content.
+                    When JS is slow, you first see the content and then it disappears.
+                    You can show the content again by using the toggle button of the disclosure element.
+                </p>
+                <p>
+                    Having the content visible in the content means is can be viewd even when JS fails.
+                </p>
+            </div>
+            <div>
+                <p>
+                    We want to avoid the layout shift caused by initial display of the content.
+                </p>
+                <p>
+                    We wrap the content with <code>&lt;maybe-script&gt;</code> to hide it.
+                    But, we need the content to be "shown" once JS is successfully loaded and run (so after the "load" event).
+                    "Shown" in this case means that the <code>&lt;maybe-script&gt;</code> is shown.
+                    The content itself is now hidden by the JS behaviour.
+                    The toggle can be used to actually show the content.
+                    If we didn't show the <code>&lt;maybe-script&gt;</code> then we could never show the inner content again.
+                </p>
+                <p>
+                    When JS fails to load, we also want to show the content so that it is accessible without any JS.
+                </p>
+            </div>
+            <div class="example-display">
+                <button data-disclosure data-disclosure-toggles="example-1">Toggle</button>
+                <p class="important-banner" data-disclosure-content="example-1">
+                    This is some content.
+                </p>
+            </div>
+            <div class="example-display">
+                <button data-disclosure data-disclosure-toggles="example-2">Toggle</button>
+                <!-- Since we hide and show this one with JS, we only need the delay for the content. -->
+                <maybe-script src="main.js">
+                    <p class="important-banner" data-disclosure-content="example-2">
+                        This is some conent.
                     </p>
-                    <p>
-                        Consider a filter or search form.
-                        For the HTML implementation, you need there to be a "submit" button so that the form can be sent to the server.
-                    </p>
-                    <p>
-                        However, when the form is enhanced with functionality that automatically submits the form and updates the results list, the "submit" button is now superfluous.
-                        Even worse, it may even confuse users.
-                        The existence of the button might distract them from the fact that the results have already been updated.
-                    </p>
-                    <p>
-                        You can add the removal of the button to the script behavior.
-                        However, when JS is slow to load and execute, we get a layout shift from the disappearing button.
-                    </p>
-                </td>
-                <td>
-                    <p>
-                        We want to avoid the layout shift caused by the disappearing button.
-                    </p>
-                    <p>
-                        We only want the button to be available when the script did not enhance the form to submit automatically.
-                    </p>
-                </td>
-            </tr><tr>
-                <td colspan=2>
-                    <strong>Disclosure content</strong>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>
-                        The content is rendered normally into the page.
-                        When JS is loaded and run successfully then it hides the content.
-                        When JS is slow, you first see the content and then it disappears.
-                        You can show the content again by using the toggle button of the disclosure element.
-                    </p>
-                    <p>
-                        Having the content visible in the content means is can be viewd even when JS fails.
-                    </p>
-                </td>
-                <td>
-                    <p>
-                        We want to avoid the layout shift caused by initial display of the content.
-                    </p>
-                    <p>
-                        We wrap the content with <code>&lt;maybe-script&gt;</code> to hide it.
-                        But, we need the content to be "shown" once JS is successfully loaded and run (so after the "load" event).
-                        "Shown" in this case means that the <code>&lt;maybe-script&gt;</code> is shown.
-                        The content itself is now hidden by the JS behaviour.
-                        The toggle can be used to actually show the content.
-                        If we didn't show the <code>&lt;maybe-script&gt;</code> then we could never show the inner content again.
-                    </p>
-                    <p>
-                        When JS fails to load, we also want to show the content so that it is accessible without any JS.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td class="example-display">
-                    <button data-disclosure data-disclosure-toggles="example-1">Toggle</button>
-                    <p class="important-banner" data-disclosure-content="example-1">
-                        This is some content.
-                    </p>
-                </td>
-                <td class="example-display">
-                    <button data-disclosure data-disclosure-toggles="example-2">Toggle</button>
-                    <!-- Since we hide and show this one with JS, we only need the delay for the content. -->
-                    <maybe-script src="main.js">
-                        <p class="important-banner" data-disclosure-content="example-2">
-                            This is some conent.
-                        </p>
-                    </maybe-script>
-                </td>
-            </tr>
-        </table>
+                </maybe-script>
+            </div>
+        </div>
     </body>
 </html>
