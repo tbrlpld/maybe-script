@@ -4,7 +4,7 @@ function main() {
 
     console.log("Hello from main() function")
     Disclosure.init()
-    SubmitOnBlur.init()
+    SubmitOnChange.init()
 }
 
 
@@ -40,6 +40,8 @@ class Disclosure extends Component {
         this.hiddenClass = "hidden"
 
         this.button.addEventListener("click", () => {this.toggle()})
+        this.button.removeAttribute("hidden")
+
         this.hide()
     }
 
@@ -77,6 +79,25 @@ class SubmitOnBlur extends Component {
 
         this.input.addEventListener("blur", () => {this.form.submit()})
         this.input.setAttribute("placeholder", "Submits on blur, sorry.")
+
+        this.button = this.form.querySelector("button[type='submit']")
+        this.button.remove()
+    }
+}
+
+class SubmitOnChange extends Component {
+    static selector () {return "[data-submit-on-change]"}
+
+    constructor(elem) {
+        super()
+
+        this.input = elem
+        this.form = this.input.closest("form")
+
+        console.log(this.input)
+        console.log(this.form)
+
+        this.input.addEventListener("change", () => {this.form.submit()})
 
         this.button = this.form.querySelector("button[type='submit']")
         this.button.remove()

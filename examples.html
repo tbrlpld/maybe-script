@@ -41,6 +41,9 @@
                     You can remove the button with the script.
                     However, when JS is slow to load and execute, we get a layout shift from the disappearing button.
                 </p>
+                <p>
+                    <i>The example filter form will submit on checking the box.</i>
+                </p>
             </div>
             <div>
                 <p>
@@ -53,15 +56,21 @@
 
             <div class="example-display">
                 <form action="" method="get">
-                    <input type="search" name="q" data-submit-on-blur>
-                    <button type="submit">Search</button>
+                    <div>
+                        <input type="checkbox" id="filter-without" name="filter" data-submit-on-change>
+                        <label for="filter-without">Filtered</label>
+                    </div>
+                    <button type="submit">Apply filter</button>
                 </form>
             </div>
             <div class="example-display">
                 <form action="" method="get">
-                    <input type="search" name="q" data-submit-on-blur>
+                    <div>
+                        <input type="checkbox" id="filter-with" name="filter" data-submit-on-change>
+                        <label for="filter-with">Filtered</label>
+                    </div>
                     <maybe-script src="main.js">
-                        <button type="submit">Search</button>
+                        <button type="submit">Apply filter</button>
                     </maybe-script>
                 </form>
             </div>
