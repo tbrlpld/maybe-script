@@ -66,6 +66,43 @@
                 </form>
             </div>
 
+            <h2 class="span-2">Controls that require scripting</h2>
+
+            <div>
+                <p>
+                    When you add dynamic behavior the a page with scripting, you likely add new elements for the user to trigger the new behavior.
+                </p>
+                <p>
+                    Pretty much any <code>&lt;button&gt;</code> falls into this category.
+                    Unless it is a "sumbit" button in a form, it dosen't do anything with out the required script having loaded.
+                </p>
+                <p>
+                    To avoid showing these elements when they are not functional (i.e. when the script fails to load) you can hide them via styling of the `hidden` attribute.
+                    When the script loads, it removes the respective class or `hidden` attribute.
+                </p>
+                <p>
+                    The "showing" of the button leads to a layout shift.
+                </p>
+            </div>
+            <div>
+                <p>
+                    We want to avoid that layout shift from showing the button in the success case.
+                </p>
+                <p>
+                    To cover the "no JS" case, we also want to hide the button in the beginning.
+                    But, if JS is available we want to show the button before the first paint.
+                    Then, we only remove the button again when the script fails.
+                </p>
+            </div>
+            <div class="example-display">
+                <button data-disclosure data-disclosure-toggles="example-1" hidden>Toggle content below</button>
+            </div>
+            <div class="example-display">
+                <maybe-script src="main.js">
+                    <button data-disclosure data-disclosure-toggles="example-2">Toggle content below</button>
+                </maybe-script>
+            </div>
+
             <h2 class="span-2">Disclosure content</h2>
 
             <div>
@@ -96,13 +133,11 @@
                 </p>
             </div>
             <div class="example-display">
-                <button data-disclosure data-disclosure-toggles="example-1">Toggle</button>
                 <p class="important-banner" data-disclosure-content="example-1">
                     This is some content.
                 </p>
             </div>
             <div class="example-display">
-                <button data-disclosure data-disclosure-toggles="example-2">Toggle</button>
                 <!-- Since we hide and show this one with JS, we only need the delay for the content. -->
                 <maybe-script src="main.js">
                     <p class="important-banner" data-disclosure-content="example-2">
