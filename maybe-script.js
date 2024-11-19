@@ -134,9 +134,33 @@ class MaybeScript extends HTMLElement {
             throw MaybeScriptRegisterNotSetUp()
         }
 
-        this.hide()
-
         window.maybeScript.registerCustomElement(this)
+
+        this.setInitialState()
+    }
+
+    setInitialState() {
+        console.log("Setting initial state", this)
+
+        const init = this.getAttribute("on:init")
+        try {
+            this.updateForAttributeValue(init)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    updateForAttributeValue(value) {
+        if (value == null) {
+            console.debug("No initial state defined", this)
+            return
+        } else if (value == "hide") {
+            this.hide()
+        } else if (value == "show") {
+            this.show()
+        } else {
+            throw InvalidAttributeValue()
+        }
     }
 
     updateForScriptStatus(status) {
@@ -161,6 +185,13 @@ class MaybeScript extends HTMLElement {
 
 
 class MaybeScriptRegisterNotSetUp extends Error {
+    constructor(message, options) {
+        super(message, options);
+    }
+}
+
+
+class InvalidAttributeValue extends Error {
     constructor(message, options) {
         super(message, options);
     }

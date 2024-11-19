@@ -69,7 +69,7 @@
                         <input type="checkbox" id="filter-with" name="filter" data-submit-on-change>
                         <label for="filter-with">Filtered</label>
                     </div>
-                    <maybe-script src="main.js">
+                    <maybe-script src="main.js" on:init="hide">
                         <button type="submit">Apply filter</button>
                     </maybe-script>
                 </form>
@@ -107,7 +107,7 @@
                 <button data-disclosure data-disclosure-toggles="example-1" hidden>Toggle content below</button>
             </div>
             <div class="example-display">
-                <maybe-script src="main.js" hidden>
+                <maybe-script src="main.js" hidden on:init="show">
                     <button data-disclosure data-disclosure-toggles="example-2">Toggle content below</button>
                 </maybe-script>
             </div>
@@ -150,7 +150,7 @@
             </div>
             <div class="example-display">
                 <!-- Since we hide and show this one with JS, we only need the delay for the content. -->
-                <maybe-script src="main.js">
+                <maybe-script src="main.js" on:init="hide">
                     <p class="important-banner" data-disclosure-content="example-2">
                         This is some conent.
                     </p>
