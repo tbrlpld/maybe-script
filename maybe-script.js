@@ -136,21 +136,11 @@ class MaybeScript extends HTMLElement {
 
         window.maybeScript.registerCustomElement(this)
 
-        this.setInitialState()
+        this.updateForAttributeValue("on:init")
     }
 
-    setInitialState() {
-        console.log("Setting initial state", this)
-
-        const init = this.getAttribute("on:init")
-        try {
-            this.updateForAttributeValue(init)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    updateForAttributeValue(value) {
+    updateForAttributeValue(attr) {
+        const value = this.getAttribute(attr)
         if (value == null) {
             console.debug("No initial state defined", this)
             return
