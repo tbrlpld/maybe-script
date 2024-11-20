@@ -142,7 +142,7 @@ class MaybeScript extends HTMLElement {
     updateForAttributeValue(attr) {
         const value = this.getAttribute(attr)
         if (value == null) {
-            console.debug("No initial state defined", this)
+            console.debug(`No state defined for ${attr}`, this)
             return
         } else if (value == "hide") {
             this.hide()
@@ -158,9 +158,16 @@ class MaybeScript extends HTMLElement {
 
         if (responseStatusOk(status)) {
             this.updateForAttributeValue("on:success")
-        }
 
-        this.updateForAttributeValue("on:failure")
+            window.addEventListener("load", () => {this.handleLoadAfterSuccess()})
+        } else {
+            this.updateForAttributeValue("on:failure")
+        }
+    }
+
+    handleLoadAfterSuccess() {
+        console.log("Load after success", this)
+        this.updateForAttributeValue("on:load-after-success")
     }
 
     hide() {
