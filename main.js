@@ -10,7 +10,6 @@ function main() {
 
 class Component {
     static init() {
-        console.debug("Initializing", this)
         const elems = document.querySelectorAll(this.selector())
 
         elems.forEach((elem) => {
@@ -54,12 +53,10 @@ class Disclosure extends Component {
     }
 
     hide () {
-        console.debug("Hiding", this.content)
         this.content.classList.add(this.hiddenClass)
     }
 
     show () {
-        console.debug("Showing", this.content)
         this.content.classList.remove(this.hiddenClass)
     }
 
@@ -93,9 +90,6 @@ class SubmitOnChange extends Component {
 
         this.input = elem
         this.form = this.input.closest("form")
-
-        console.log(this.input)
-        console.log(this.form)
 
         this.input.addEventListener("change", () => {this.form.submit()})
 
