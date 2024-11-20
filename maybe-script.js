@@ -156,10 +156,11 @@ class MaybeScript extends HTMLElement {
     updateForScriptStatus(status) {
         console.log("Updating custom element for script status", this, status)
 
-        // If the script loaded ok, we don't do anything
-        if (responseStatusOk(status)) return
+        if (responseStatusOk(status)) {
+            this.updateForAttributeValue("on:success")
+        }
 
-        this.show()
+        this.updateForAttributeValue("on:failure")
     }
 
     hide() {
