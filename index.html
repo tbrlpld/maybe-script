@@ -24,7 +24,6 @@
         </nav>
         <h1>Tests</h1>
 
-
         <section>
             <table>
                 <tr>
@@ -33,8 +32,14 @@
                     <th>Actual</th>
                 </tr>
                 <tr>
+                    <td colspan=3>
+                        <h2>Show for no JS</h2>
+                        <p>This is only show when JS is really turned off.</p>
+                    </td>
+                </tr>
+                <tr>
                     <td>
-                        When JavaScript is available, this should not show.
+                        When JavaScript is available, this should not show. (<code>&lt;noscript&gt;</code>)
                     </td>
                     <td></td>
                     <td>
@@ -45,11 +50,31 @@
                 </tr>
                 <tr>
                     <td>
+                        When JavaScript is available, this should not show. (<code>&lt;maybe-script&gt;</code>)
+                    </td>
+                    <td></td>
+                    <td>
+                        <maybe-script on:init="hide">
+                            ❌
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=3>
+                        <h2>Show on failure</h2>
+                        <p>
+                            The custom elemtents are configured to hide initially (when connected) and show on failure of the defined script.
+                            Of course, turning JS off also means that the scripts are failing.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         When the script loads successfully, this should not show.
                     </td>
                     <td></td>
                     <td>
-                        <maybe-script src="main.js">
+                        <maybe-script src="main.js" on:init="hide" on:failure="show">
                             ❌
                         </maybe-script>
                     </td>
@@ -61,7 +86,7 @@
                     <td>
                     </td>
                     <td>
-                        <maybe-script src="undeferred.js">
+                        <maybe-script src="undeferred.js" on:init="hide" on:failure="show">
                             ❌
                         </maybe-script>
                     </td>
@@ -74,7 +99,7 @@
                         ✅
                     </td>
                     <td>
-                        <maybe-script src="404-script.js">
+                        <maybe-script src="404-script.js" on:init="hide" on:failure="show">
                             ✅
                         </maybe-script>
                     </td>
@@ -87,7 +112,7 @@
                         ✅
                     </td>
                     <td>
-                        <maybe-script src="https://unpkg.com/htmx.org@404">
+                        <maybe-script src="https://unpkg.com/htmx.org@404" on:init="hide" on:failure="show">
                             ✅
                         </maybe-script>
                     </td>
@@ -100,7 +125,7 @@
                         ✅
                     </td>
                     <td>
-                        <maybe-script src="no-corresponding-script-tag.js">
+                        <maybe-script src="no-corresponding-script-tag.js" on:init="hide" on:failure="show">
                             ✅
                         </maybe-script>
                     </td>
