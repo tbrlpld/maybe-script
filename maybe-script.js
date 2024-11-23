@@ -130,16 +130,17 @@ class MaybeScript extends HTMLElement {
     connectedCallback() {
         console.log("Custom element connected", this)
 
+        this.updateForAttributeValue("on:init")
+
         if (!isRegisterSetUp()) {
             throw MaybeScriptRegisterNotSetUp()
         }
 
         window.maybeScript.registerCustomElement(this)
-
-        this.updateForAttributeValue("on:init")
     }
 
     updateForAttributeValue(attr) {
+        console.log("Updating custom element with attribute", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
             console.debug(`No state defined for ${attr}`, this)
