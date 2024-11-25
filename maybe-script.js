@@ -130,7 +130,7 @@ class MaybeScript extends HTMLElement {
     connectedCallback() {
         console.log("Custom element connected", this)
 
-        this.updateWithAttributeValue("on:init")
+        this.runAttributeAction("on:init")
 
         if (!isRegisterSetUp()) {
             throw MaybeScriptRegisterNotSetUp()
@@ -139,7 +139,7 @@ class MaybeScript extends HTMLElement {
         window.maybeScript.registerCustomElement(this)
     }
 
-    updateWithAttributeValue(attr) {
+    runAttributeAction(attr) {
         console.log("Updating custom element with attribute", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
@@ -158,17 +158,17 @@ class MaybeScript extends HTMLElement {
         console.log("Updating custom element for script status", this, status)
 
         if (responseStatusOk(status)) {
-            this.updateWithAttributeValue("on:success")
+            this.runAttributeAction("on:success")
 
             window.addEventListener("load", () => {this.handleLoadAfterSuccess()})
         } else {
-            this.updateWithAttributeValue("on:failure")
+            this.runAttributeAction("on:failure")
         }
     }
 
     handleLoadAfterSuccess() {
         console.log("Load after success", this)
-        this.updateWithAttributeValue("on:load-after-success")
+        this.runAttributeAction("on:load-after-success")
     }
 
     hide() {
