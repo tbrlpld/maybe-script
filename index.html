@@ -118,14 +118,52 @@
                     </td>
                 </tr>
                 <tr>
+                    <td colspan=3>
+                        <h2>Show after delay</h2>
+                        <p>
+                            The custom elemtents are configured to hide initially (when connected) and show on failure or after some delay.
+                            With JS disables the elements are never hidden and show all the time.
+                        </p>
+                        <p>
+                            To simulate a slow loading script, we don't have a <code>&lt;script&gt;</code> tag with the awaited <code>scr</code>.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
                     <td>
-                        When there is no corresponding <code>&lt;script&gt;</code> tag, the content should show.
+                        When the script takes too long to load, without actually failing, we treat it as failed after a certain delay.
                     </td>
                     <td>
                         ✅
                     </td>
                     <td>
                         <maybe-script src="no-corresponding-script-tag.js" on:init="hide" on:failure="show">
+                            ✅
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When the script takes too long to load, we can also define a different action other than the failure action.
+                    </td>
+                    <td>
+                        ✅
+                    </td>
+                    <td>
+                        <maybe-script src="no-corresponding-script-tag.js" on:init="hide" on:timeout="show">
+                            ✅
+                        </maybe-script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        When the script takes too long to load, we can also define a different action other than the failure action. (short delay)
+                    </td>
+                    <td>
+                        ✅
+                    </td>
+                    <td>
+                        <maybe-script src="no-corresponding-script-tag.js" on:init="hide" on:timeout="show" timeout="1000">
                             ✅
                         </maybe-script>
                     </td>
