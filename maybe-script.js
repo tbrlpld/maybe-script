@@ -125,25 +125,30 @@ class MaybeScript extends HTMLElement {
         // Super constructor returns a reference to the element itself.
         super()
         console.debug("Custom element constructed", this)
+
+        this.timeout = 3000
     }
 
     connectedCallback() {
         console.debug("Custom element connected", this)
 
-        this.runAttributeAction("on:init")
-
         if (!isRegisterSetUp()) {
             throw MaybeScriptRegisterNotSetUp()
         }
 
+        this.runAttributeAction("on:init")
+
+        this.setUpTimeout()
+
         window.maybeScript.registerCustomElement(this)
     }
+
 
     runAttributeAction(attr) {
         console.debug("Updating custom element with attribute", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
-            console.debug(`No state defined for ${attr}`, this)
+            console.debug(`No action defined for ${attr}`, this)
             return
         } else if (value == "hide") {
             this.hide()
@@ -164,11 +169,37 @@ class MaybeScript extends HTMLElement {
         } else {
             this.runAttributeAction("on:failure")
         }
+
+        // We already got our result. No need to wait anymore.
+        this.clearTimeout()
     }
 
     handleLoadAfterSuccess() {
         console.debug("Load after success", this)
         this.runAttributeAction("on:load-after-success")
+    }
+
+    setUpTimeout() {
+        const timeout = this.getAttribute("timeout")
+        if (timeout !== null) {
+            this.timeout = timeout
+        }
+        this.timer = setTimeout(() => {this.handleTimeout()}, this.timeout)
+    }
+
+    handleTimeout() {
+        console.log("Timeout reached. Handling it.", this)
+        const timeoutAttr = "on:timeout"
+        if (this.hasAttribute(timeoutAttr)) {
+            this.runAttributeAction(timeoutAttr)}
+        else {
+            this.runAttributeAction("on:failure")
+        }
+    }
+
+    clearTimeout() {
+        if (!this.timer) return
+        clearTimeout(this.timer)
     }
 
     hide() {
