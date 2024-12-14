@@ -197,5 +197,5 @@ class InvalidAttributeValue extends Error {
 }
 
 
-(() => {main()})();
+main();
 
