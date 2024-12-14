@@ -1,11 +1,11 @@
 // This runs where the script is included.
 // So at the top of the document.
-console.log("maybe-script.js running")
+console.debug("maybe-script.js running")
 
 
 function main() {
-    document.addEventListener("DOMContentLoaded", () => { console.log("DOMContentLoaded")})
-    window.addEventListener("load", () => { console.log("load")})
+    document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
+    window.addEventListener("load", () => { console.debug("load")})
 
     createRegister()
 
@@ -17,7 +17,7 @@ function main() {
 
 function createRegister() {
     if (!isRegisterSetUp()) {
-        console.log("Setting up register")
+        console.debug("Setting up register")
         window.maybeScript = new Register()
     }
 }
@@ -38,7 +38,7 @@ function responseStatusOk(statusCode) {
 
 
 function setUpScriptStateReporting() {
-    console.log("Setting up reporting of script loading states")
+    console.debug("Setting up reporting of script loading states")
     // The performance observer will run the registerd handler for resources added before this point and for new ones.
     // This means we can set this up immediately.
 
@@ -56,7 +56,7 @@ function setUpScriptStateReporting() {
     // Buffered makes sure we get historic entires
     performanceObserver.observe({type: "resource", buffered: true})
 
-    console.log("Setting up reporting of script loading states -- DONE")
+    console.debug("Setting up reporting of script loading states -- DONE")
 }
 
 
@@ -66,7 +66,7 @@ class Register {
     }
 
     registerCustomElement(maybeScript) {
-        console.log("Registering custom element", maybeScript)
+        console.debug("Registering custom element", maybeScript)
 
         // Convert the `src` to an absolute URL.
         // This is needed because the performance entries use the absolute URL.
@@ -88,7 +88,7 @@ class Register {
     }
 
     registerScriptStatus(scriptURL, status) {
-        console.log("Reporting script status", scriptURL, status)
+        console.debug("Reporting script status", scriptURL, status)
 
         let entry = this.map.get(scriptURL)
         if (entry === undefined) {
@@ -124,11 +124,11 @@ class MaybeScript extends HTMLElement {
     constructor() {
         // Super constructor returns a reference to the element itself.
         super()
-        console.log("Custom element constructed", this)
+        console.debug("Custom element constructed", this)
     }
 
     connectedCallback() {
-        console.log("Custom element connected", this)
+        console.debug("Custom element connected", this)
 
         this.runAttributeAction("on:init")
 
@@ -140,7 +140,7 @@ class MaybeScript extends HTMLElement {
     }
 
     runAttributeAction(attr) {
-        console.log("Updating custom element with attribute", this, attr)
+        console.debug("Updating custom element with attribute", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
             console.debug(`No state defined for ${attr}`, this)
@@ -155,7 +155,7 @@ class MaybeScript extends HTMLElement {
     }
 
     updateForScriptStatus(status) {
-        console.log("Updating custom element for script status", this, status)
+        console.debug("Updating custom element for script status", this, status)
 
         if (responseStatusOk(status)) {
             this.runAttributeAction("on:success")
@@ -167,17 +167,17 @@ class MaybeScript extends HTMLElement {
     }
 
     handleLoadAfterSuccess() {
-        console.log("Load after success", this)
+        console.debug("Load after success", this)
         this.runAttributeAction("on:load-after-success")
     }
 
     hide() {
-        console.log("Hiding", this)
+        console.debug("Hiding", this)
         this.setAttribute("hidden", "")
     }
 
     show() {
-        console.log("Showing", this)
+        console.debug("Showing", this)
         this.removeAttribute("hidden")
     }
 }
