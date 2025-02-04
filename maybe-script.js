@@ -39,7 +39,7 @@ function responseStatusOk(statusCode) {
 
 function setUpScriptStateReporting() {
     console.debug("Setting up reporting of script loading states")
-    // The performance observer will run the registerd handler for resources added before this point and for new ones.
+    // The performance observer will run the registered handler for resources added before this point and for new ones.
     // This means we can set this up immediately.
 
     if (!isRegisterSetUp()) {
@@ -47,13 +47,13 @@ function setUpScriptStateReporting() {
     }
 
     const performanceObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
+        list.getEntriesByType("resource").forEach((entry) => {
             if (entry.initiatorType === "script") {
                 window.maybeScript.registerScriptStatus(entry.name, entry.responseStatus)
             }
         })
     })
-    // Buffered makes sure we get historic entires
+    // Buffered makes sure we get historic entries
     performanceObserver.observe({type: "resource", buffered: true})
 
     console.debug("Setting up reporting of script loading states -- DONE")
@@ -120,6 +120,7 @@ class RegisterEntry {
 }
 
 
+// noinspection JSUnusedGlobalSymbols
 class MaybeScript extends HTMLElement {
     constructor() {
         // Super constructor returns a reference to the element itself.
@@ -149,10 +150,10 @@ class MaybeScript extends HTMLElement {
         const value = this.getAttribute(attr)
         if (value == null) {
             console.debug(`No action defined for ${attr}`, this)
-            return
-        } else if (value == "hide") {
+            return null
+        } else if (value === "hide") {
             this.hide()
-        } else if (value == "show") {
+        } else if (value === "show") {
             this.show()
         } else {
             throw InvalidAttributeValue()
@@ -215,16 +216,10 @@ class MaybeScript extends HTMLElement {
 
 
 class MaybeScriptRegisterNotSetUp extends Error {
-    constructor(message, options) {
-        super(message, options);
-    }
 }
 
 
 class InvalidAttributeValue extends Error {
-    constructor(message, options) {
-        super(message, options);
-    }
 }
 
 
