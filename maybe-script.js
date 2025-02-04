@@ -150,7 +150,6 @@ class MaybeScript extends HTMLElement {
         const value = this.getAttribute(attr)
         if (value == null) {
             console.debug(`No action defined for ${attr}`, this)
-            return null
         } else if (value === "hide") {
             this.hide()
         } else if (value === "show") {
