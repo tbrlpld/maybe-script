@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <title>Testing Maybe-Script</title>
         <meta name=”viewport” content=”width=device-width,initial-scale=1”>
         <link rel="icon" href="data:,">
         <link rel="stylesheet" href="style.css">
@@ -28,13 +29,13 @@
             <table>
                 <tr>
                     <th>Description</th>
-                    <th>Expected</td>
+                    <th>Expected</th>
                     <th>Actual</th>
                 </tr>
                 <tr>
                     <td colspan=3>
                         <h2>Show for no JS</h2>
-                        <p>This is only show when JS is really turned off.</p>
+                        <p>This is only shows when JS is really turned off.</p>
                     </td>
                 </tr>
                 <tr>
@@ -63,7 +64,7 @@
                     <td colspan=3>
                         <h2>Show on failure</h2>
                         <p>
-                            The custom elemtents are configured to hide initially (when connected) and show on failure of the defined script.
+                            The custom elements are configured to hide initially (when connected) and show on failure of the defined script.
                             Of course, turning JS off also means that the scripts are failing.
                         </p>
                     </td>
@@ -121,8 +122,8 @@
                     <td colspan=3>
                         <h2>Show after delay</h2>
                         <p>
-                            The custom elemtents are configured to hide initially (when connected) and show on failure or after some delay.
-                            With JS disables the elements are never hidden and show all the time.
+                            The custom elements are configured to hide initially (when connected) and show on failure or after some delay.
+                            With JS disabled, the elements are never hidden and show all the time.
                         </p>
                         <p>
                             To simulate a slow loading script, we don't have a <code>&lt;script&gt;</code> tag with the awaited <code>scr</code>.
@@ -179,7 +180,7 @@
 
         <!-- <section> -->
         <!--     <maybe-script delay="100"> -->
-        <!--         <div>Another elemtent to hide in a different section of the page.</div> -->
+        <!--         <div>Another element to hide in a different section of the page.</div> -->
         <!--     </maybe-script> -->
         <!-- </section> -->
     </body>
