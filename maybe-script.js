@@ -137,7 +137,7 @@ class MaybeScript extends HTMLElement {
             throw MaybeScriptRegisterNotSetUp()
         }
 
-        this.runAttributeAction("on:init")
+        this.handleInit()
 
         this.setUpTimeout()
 
@@ -148,15 +148,25 @@ class MaybeScript extends HTMLElement {
         console.debug("Updating custom element for script status", this, status)
 
         if (responseStatusOk(status)) {
-            this.runAttributeAction("on:success")
+            this.handleSuccess()
 
             window.addEventListener("load", () => {this.handleLoadAfterSuccess()})
         } else {
-            this.runAttributeAction("on:failure")
+            this.handleFailure()
         }
 
         // We already got our result. No need to wait anymore.
         this.clearTimeout()
+    }
+
+    handleInit() {
+        console.debug("Custom element initialized. Handling it...", this)
+        this.runAttributeAction("on:init")
+    }
+
+    handleSuccess() {
+        console.debug("Awaited script loaded successfully. Handling it...", this)
+        this.runAttributeAction("on:success")
     }
 
     /*
@@ -166,12 +176,17 @@ class MaybeScript extends HTMLElement {
      * but also had time to run.
      */
     handleLoadAfterSuccess() {
-        console.debug("Load after success", this)
+        console.debug("Document loaded after awaited script was successfully loaded. Handling it...", this)
         this.runAttributeAction("on:load-after-success")
     }
 
+    handleFailure() {
+        console.debug("Awaited script failed to load. Handling it...", this)
+        this.runAttributeAction("on:failure")
+    }
+
     handleTimeout() {
-        console.log("Timeout reached. Handling it.", this)
+        console.log("Timeout reached. Handling it...", this)
         const timeoutAttr = "on:timeout"
         if (this.hasAttribute(timeoutAttr)) {
             this.runAttributeAction(timeoutAttr)}
