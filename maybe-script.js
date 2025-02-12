@@ -174,6 +174,12 @@ class MaybeScript extends HTMLElement {
         this.clearTimeout()
     }
 
+    /*
+     * Handle the load event after successful loading of a script.
+     *
+     * This may be helpful when an action should be delayed until the script has not only been loaded,
+     * but also had time to run.
+     */
     handleLoadAfterSuccess() {
         console.debug("Load after success", this)
         this.runAttributeAction("on:load-after-success")
