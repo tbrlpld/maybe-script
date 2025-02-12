@@ -185,14 +185,6 @@ class MaybeScript extends HTMLElement {
         this.runAttributeAction("on:load-after-success")
     }
 
-    setUpTimeout() {
-        const timeout = this.getAttribute("timeout")
-        if (timeout !== null) {
-            this.timeout = timeout
-        }
-        this.timer = setTimeout(() => {this.handleTimeout()}, this.timeout)
-    }
-
     handleTimeout() {
         console.log("Timeout reached. Handling it.", this)
         const timeoutAttr = "on:timeout"
@@ -201,6 +193,14 @@ class MaybeScript extends HTMLElement {
         else {
             this.runAttributeAction("on:failure")
         }
+    }
+
+    setUpTimeout() {
+        const timeout = this.getAttribute("timeout")
+        if (timeout !== null) {
+            this.timeout = timeout
+        }
+        this.timer = setTimeout(() => {this.handleTimeout()}, this.timeout)
     }
 
     clearTimeout() {
