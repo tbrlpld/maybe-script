@@ -144,21 +144,6 @@ class MaybeScript extends HTMLElement {
         window.maybeScript.registerCustomElement(this)
     }
 
-
-    runAttributeAction(attr) {
-        console.debug("Updating custom element with attribute", this, attr)
-        const value = this.getAttribute(attr)
-        if (value == null) {
-            console.debug(`No action defined for ${attr}`, this)
-        } else if (value === "hide") {
-            this.hide()
-        } else if (value === "show") {
-            this.show()
-        } else {
-            throw InvalidAttributeValue()
-        }
-    }
-
     updateForScriptStatus(status) {
         console.debug("Updating custom element for script status", this, status)
 
@@ -206,6 +191,20 @@ class MaybeScript extends HTMLElement {
     clearTimeout() {
         if (!this.timer) return
         clearTimeout(this.timer)
+    }
+
+    runAttributeAction(attr) {
+        console.debug("Updating custom element with attribute", this, attr)
+        const value = this.getAttribute(attr)
+        if (value == null) {
+            console.debug(`No action defined for ${attr}`, this)
+        } else if (value === "hide") {
+            this.hide()
+        } else if (value === "show") {
+            this.show()
+        } else {
+            throw InvalidAttributeValue()
+        }
     }
 
     hide() {
