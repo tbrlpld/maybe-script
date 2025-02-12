@@ -209,7 +209,7 @@ class MaybeScript extends HTMLElement {
     }
 
     runAttributeAction(attr) {
-        console.debug("Updating custom element with attribute", this, attr)
+        console.debug("Updating custom element with attribute action...", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
             console.debug(`No action defined for ${attr}`, this)
