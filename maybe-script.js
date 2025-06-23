@@ -33,7 +33,7 @@ function isRegisterSetUp() {
 
 
 function responseStatusOk(statusCode) {
-    return statusCode >= 200 && statusCode <400
+    return statusCode >= 200 && statusCode <300
 }
 
 
