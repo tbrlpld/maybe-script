@@ -1,11 +1,15 @@
 {
-	auto_https off
+    auto_https off
 }
 
-http://localhost:8000 {
-    root * .
-	file_server
-    header {
-        Content-Security-Policy "script-src 'self' unpkg.com"
+:8000 {
+    file_server browse {
+        root ./tests/
+    }
+}
+
+:8001 {
+    file_server browse {
+        root ./src/
     }
 }
