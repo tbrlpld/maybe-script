@@ -7,8 +7,6 @@ function main() {
     document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
     window.addEventListener("load", () => { console.debug("load")})
 
-    getOrCreateController()
-
     customElements.define("maybe-script", MaybeScript)
 }
 
@@ -121,6 +119,8 @@ class MaybeScript extends HTMLElement {
         console.debug("Custom element constructed", this)
 
         this.timeout = 3000
+
+        this.controller = getOrCreateController()
     }
 
     connectedCallback() {
@@ -130,7 +130,6 @@ class MaybeScript extends HTMLElement {
 
         this.setUpTimeout()
 
-        this.controller = getOrCreateController()
         this.controller.registerCustomElement(this)
     }
 
