@@ -75,7 +75,7 @@ class Register {
 
         // Add the custom element to the array of elements interested in this scriptURL.
         const entry = this.getOrCreateRegisterEntry(scriptURL)
-        entry.elements.push(maybeScript)
+        entry.addElement(maybeScript)
         this.map.set(scriptURL, entry)
 
         // If we already have a status, we update the new element with that.
@@ -122,6 +122,10 @@ class RegisterEntry {
     constructor() {
         this.status = undefined
         this.elements = []
+    }
+
+    addElement(maybeScript) {
+        this.elements.push(maybeScript)
     }
 }
 
