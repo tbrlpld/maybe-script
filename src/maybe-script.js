@@ -18,14 +18,14 @@ function main() {
 function createRegister() {
     if (!isRegisterSetUp()) {
         console.debug("Setting up register")
-        window.maybeScript = new Register()
+        window.maybeScript = new Controller()
     }
 }
 
 
 function isRegisterSetUp() {
     try {
-        return window.maybeScript instanceof Register
+        return window.maybeScript instanceof Controller
     } catch {
         return false
     }
@@ -60,9 +60,9 @@ function setUpScriptStateReporting() {
 }
 
 
-class Register {
+class Controller {
     constructor() {
-        this.map = new Map()
+        this.register = new Map()
     }
 
     registerCustomElement(maybeScript) {
@@ -76,7 +76,7 @@ class Register {
         // Add the custom element to the array of elements interested in this scriptURL.
         const entry = this.getOrCreateRegisterEntry(scriptURL)
         entry.addElement(maybeScript)
-        this.map.set(scriptURL, entry)
+        this.register.set(scriptURL, entry)
 
         // If we already have a status, we update the new element with that.
         if (entry.status !== undefined) {
@@ -89,14 +89,14 @@ class Register {
 
         const entry = this.getOrCreateRegisterEntry(scriptURL)
         entry.status = status
-        this.map.set(scriptURL, entry)
+        this.register.set(scriptURL, entry)
 
         entry.elements.forEach((ce) => ce.updateForScriptStatus(status))
     }
 
     /* Get the RegisterEntry for a script URL, creating it if needed. */
     getOrCreateRegisterEntry(scriptURL) {
-        let entry = this.map.get(scriptURL)
+        let entry = this.register.get(scriptURL)
         if (entry === undefined) {
             entry = new RegisterEntry()
         }
