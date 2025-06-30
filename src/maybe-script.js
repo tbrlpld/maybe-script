@@ -99,7 +99,7 @@ class Register {
 
     /* Get the RegisterEntry for a script URL, creating it if needed. */
     getOrCreateRegisterEntry(scriptURL) {
-        const entry = this.map.get(scriptURL)
+        let entry = this.map.get(scriptURL)
         if (entry === undefined) {
             entry = new RegisterEntry()
         }
