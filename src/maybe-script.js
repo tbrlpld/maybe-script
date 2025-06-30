@@ -7,26 +7,17 @@ function main() {
     document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
     window.addEventListener("load", () => { console.debug("load")})
 
-    createController()
+    getOrCreateController()
 
     customElements.define("maybe-script", MaybeScript)
 }
 
 
-function createController() {
-    if (!isControllerSetUp()) {
-        console.debug("Setting up controller")
+function getOrCreateController(){
+    if (!(window.maybeScript instanceof Controller)) {
         window.maybeScript = new Controller()
     }
-}
-
-
-function isControllerSetUp() {
-    try {
-        return window.maybeScript instanceof Controller
-    } catch {
-        return false
-    }
+    return window.maybeScript
 }
 
 
@@ -135,15 +126,12 @@ class MaybeScript extends HTMLElement {
     connectedCallback() {
         console.debug("Custom element connected", this)
 
-        if (!isControllerSetUp()) {
-            throw MaybeScriptControllerNotSetUp()
-        }
-
         this.handleInit()
 
         this.setUpTimeout()
 
-        window.maybeScript.registerCustomElement(this)
+        this.controller = getOrCreateController()
+        this.controller.registerCustomElement(this)
     }
 
     updateForScriptStatus(status) {
