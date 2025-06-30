@@ -4,3 +4,20 @@
         color: white;
     }
 }
+
+a {
+    text-decoration: underline;
+
+    &:hover {
+        text-decoration: dotted underline;
+    }
+
+}
+
+@media (prefers-color-scheme: dark) {
+    a,
+    a:visited {
+        color: white;
+        background-color: black;
+    }
+}
