@@ -87,10 +87,7 @@ class Register {
     registerScriptStatus(scriptURL, status) {
         console.debug("Reporting script status", scriptURL, status)
 
-        let entry = this.map.get(scriptURL)
-        if (entry === undefined) {
-            entry = new RegisterEntry()
-        }
+        const entry = this.getOrCreateRegisterEntry(scriptURL)
         entry.status = status
         this.map.set(scriptURL, entry)
 
