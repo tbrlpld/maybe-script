@@ -74,10 +74,7 @@ class Register {
         if (!scriptURL) return
 
         // Add the custom element to the array of elements interested in this scriptURL.
-        let entry = this.map.get(scriptURL)
-        if (entry === undefined) {
-            entry = new RegisterEntry()
-        }
+        const entry = this.getOrCreateRegisterEntry(scriptURL)
         entry.elements.push(maybeScript)
         this.map.set(scriptURL, entry)
 
@@ -98,6 +95,15 @@ class Register {
         this.map.set(scriptURL, entry)
 
         entry.elements.forEach((ce) => ce.updateForScriptStatus(status))
+    }
+
+    /* Get the RegisterEntry for a script URL, creating it if needed. */
+    getOrCreateRegisterEntry(scriptURL) {
+        const entry = this.map.get(scriptURL)
+        if (entry === undefined) {
+            entry = new RegisterEntry()
+        }
+        return entry
     }
 
     getAbsoluteSource(maybeScript){
