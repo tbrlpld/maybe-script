@@ -43,6 +43,22 @@
                 </div>
             </div>
         </div>
+        <script>
+            // TODO: Move this test to a separate file.
+            // Test that the same controller is used for all maybe-scripts
+            const maybeScripts = document.querySelectorAll('maybe-script');
+            let previousController = null;
+            for (const maybeScript of maybeScripts) {
+                if (previousController == null) {
+                    previousController = maybeScript.controller;
+                } else {
+                    console.assert(
+                        maybeScript.controller === previousController,
+                        'maybe-script controllers should be the same'
+                    );
+                }
+            }
+        </script>
     </div>
 </body>
 </html>
