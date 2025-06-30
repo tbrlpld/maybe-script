@@ -21,3 +21,24 @@ a {
         background-color: black;
     }
 }
+
+
+.test-case {
+}
+
+.test-case__columns-container {
+    display: flex;
+    justify-content: start;
+    align-content: start;
+    gap: 4rem;
+}
+
+.test-case__column {
+    flex-grow: 1;
+}
+
+.test-case__output-box {
+    border: 1px solid currentColor;
+    padding: 1rem;
+    min-height: 4rem;
+}
