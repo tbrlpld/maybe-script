@@ -7,21 +7,21 @@ function main() {
     document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
     window.addEventListener("load", () => { console.debug("load")})
 
-    createRegister()
+    createController()
 
     customElements.define("maybe-script", MaybeScript)
 }
 
 
-function createRegister() {
-    if (!isRegisterSetUp()) {
-        console.debug("Setting up register")
+function createController() {
+    if (!isControllerSetUp()) {
+        console.debug("Setting up controller")
         window.maybeScript = new Controller()
     }
 }
 
 
-function isRegisterSetUp() {
+function isControllerSetUp() {
     try {
         return window.maybeScript instanceof Controller
     } catch {
@@ -135,8 +135,8 @@ class MaybeScript extends HTMLElement {
     connectedCallback() {
         console.debug("Custom element connected", this)
 
-        if (!isRegisterSetUp()) {
-            throw MaybeScriptRegisterNotSetUp()
+        if (!isControllerSetUp()) {
+            throw MaybeScriptControllerNotSetUp()
         }
 
         this.handleInit()
@@ -236,7 +236,7 @@ class MaybeScript extends HTMLElement {
 }
 
 
-class MaybeScriptRegisterNotSetUp extends Error {
+class MaybeScriptControllerNotSetUp extends Error {
 }
 
 
