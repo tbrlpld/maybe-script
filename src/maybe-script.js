@@ -10,8 +10,6 @@ function main() {
     createRegister()
 
     customElements.define("maybe-script", MaybeScript)
-
-    setUpScriptStateReporting()
 }
 
 
@@ -37,32 +35,29 @@ function responseStatusOk(statusCode) {
 }
 
 
-function setUpScriptStateReporting() {
-    console.debug("Setting up reporting of script loading states")
-    // The performance observer will run the registered handler for resources added before this point and for new ones.
-    // This means we can set this up immediately.
-
-    if (!isRegisterSetUp()) {
-        throw MaybeScriptRegisterNotSetUp()
-    }
-
-    const performanceObserver = new PerformanceObserver((list) => {
-        list.getEntriesByType("resource").forEach((entry) => {
-            if (entry.initiatorType === "script") {
-                window.maybeScript.registerScriptStatus(entry.name, entry.responseStatus)
-            }
-        })
-    })
-    // Buffered makes sure we get historic entries
-    performanceObserver.observe({type: "resource", buffered: true})
-
-    console.debug("Setting up reporting of script loading states -- DONE")
-}
-
-
 class Controller {
     constructor() {
         this.register = new Map()
+
+        this.setUpScriptStateReporting()
+    }
+
+    setUpScriptStateReporting() {
+        console.debug("Setting up reporting of script loading states")
+        // The performance observer will run the registered handler for resources added before this point and for new ones.
+        // This means we can set this up immediately.
+
+        const performanceObserver = new PerformanceObserver((list) => {
+            list.getEntriesByType("resource").forEach((entry) => {
+                if (entry.initiatorType === "script") {
+                    this.registerScriptStatus(entry.name, entry.responseStatus)
+                }
+            })
+        })
+        // Buffered makes sure we get historic entries
+        performanceObserver.observe({type: "resource", buffered: true})
+
+        console.debug("Setting up reporting of script loading states -- DONE")
     }
 
     registerCustomElement(maybeScript) {
