@@ -111,7 +111,7 @@ class Register {
         if (!src) return
 
         const documentURL = new URL(document.URL)
-        const srcURL = new URL(src, documentURL.origin)
+        const srcURL = new URL(src, documentURL)
 
         return srcURL.href
     }
