@@ -93,7 +93,7 @@ class Controller {
 
         // Add the custom element to the array of elements interested in this scriptURL.
         const entry = this.getOrCreateRegisterEntry(absoluteURLForExpectedScript)
-        entry.addElement(maybeScript)
+        entry.elements.push(maybeScript)
         this.register.set(absoluteURLForExpectedScript, entry)
 
         // If we already have a status, we update the new element with that.
@@ -143,10 +143,6 @@ class RegisterEntry {
     constructor() {
         this.status = undefined
         this.elements = []
-    }
-
-    addElement(maybeScript) {
-        this.elements.push(maybeScript)
     }
 }
 
