@@ -9,57 +9,26 @@
     <script src="/main.js"></script>
 </head>
 <body>
-    <a href="/">Back to index</a>
+    <a href="..">Back</a>
+
     <h1>Expected script</h1>
+
     <p>
         For maybe-script to be able to respond to the loading state of a script,
         we need to tell it which script to check the loading state for.
         This is done by setting the <code>data-expect</code> attribute on the <code>&lt;script&gt;</code> tag that loads maybe-script.
     </p>
-    <div class="test-case">
-        <h2>When the expected script loads successfully...</h2>
 
-        <div class="test-case__columns-container">
-            <div class="test-case__column">
-                <h3>The box below should contain something</h3>
+    <ul>
+        <li>
+            <a href="./success.html">Loads successfully</a>
+        </li>
 
-                <div class="test-case__output-box">
-                    <maybe-script on:success="show">
-                        <div>
-                            ✅
-                        </div>
-                    </maybe-script>
-                </div>
-            </div>
+        <li>
+            <a href="./failure.html">Fails to load</a>
+        </li>
+    </ul>
 
-            <div class="test-case__column">
-                <h3>The box below should be empty</h3>
 
-                <div class="test-case__output-box">
-                    <maybe-script on:success="hide">
-                        <div>
-                            ❌
-                        </div>
-                    </maybe-script>
-                </div>
-            </div>
-        </div>
-        <script>
-            // TODO: Move this test to a separate file.
-            // Test that the same controller is used for all maybe-scripts
-            const maybeScripts = document.querySelectorAll('maybe-script');
-            let previousController = null;
-            for (const maybeScript of maybeScripts) {
-                if (previousController == null) {
-                    previousController = maybeScript.controller;
-                } else {
-                    console.assert(
-                        maybeScript.controller === previousController,
-                        'maybe-script controllers should be the same'
-                    );
-                }
-            }
-        </script>
-    </div>
 </body>
 </html>
