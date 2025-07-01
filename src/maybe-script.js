@@ -40,19 +40,22 @@ class Controller {
 
         this.register = new Map()
 
-        this.setUpLoadingStateReportingForExpectedScripts()
+        this.setUpScriptLoadingStateReporting()
     }
 
     /*
-     * Set up reporting of loading states for expected scripts.
+     * Set up registration of loading states for scripts.
      *
-     * When ever the loading status of resource changes, this will trigger the `registerScriptStatus` method.
+     * Whenever the loading status of script resource changes the `registerScriptStatus` method is called.
+     * We are registering the loading state changes for all script resources,
+     * regardless of them being "expected" scripts or not.
+     * Registering the loading states for all script resources ensures that the order of loading script and creating custom elements that expect them does not matter.
      */
-    setUpLoadingStateReportingForExpectedScripts() {
-        console.debug("Setting up reporting of script loading states")
+    setUpScriptLoadingStateReporting() {
+        console.debug("Setting up registration of script loading states.")
+
         // The performance observer will run the registered handler for resources added before this point and for new ones.
         // This means we can set this up immediately.
-
         const performanceObserver = new PerformanceObserver((list) => {
             list.getEntriesByType("resource").forEach((entry) => {
                 if (entry.initiatorType === "script") {
@@ -60,10 +63,10 @@ class Controller {
                 }
             })
         })
-        // Buffered makes sure we get historic entries
+        // Buffered makes sure we get historic entries.
         performanceObserver.observe({type: "resource", buffered: true})
 
-        console.debug("Setting up reporting of script loading states -- DONE")
+        console.debug("Setting up reporting of script loading states -- DONE.")
     }
 
     registerCustomElement(maybeScript) {
