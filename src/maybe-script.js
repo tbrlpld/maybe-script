@@ -40,18 +40,18 @@ class Controller {
 
         this.register = new Map()
 
-        this.setUpScriptLoadingStateReporting()
+        this.setUpScriptLoadingStateHandling()
     }
 
     /*
-     * Set up registration of loading states for scripts.
+     * Set up handling of loading states for scripts.
      *
      * Whenever the loading status of script resource changes the `registerScriptStatus` method is called.
      * We are registering the loading state changes for all script resources,
      * regardless of them being "expected" scripts or not.
      * Registering the loading states for all script resources ensures that the order of loading script and creating custom elements that expect them does not matter.
      */
-    setUpScriptLoadingStateReporting() {
+    setUpScriptLoadingStateHandling() {
         console.debug("Setting up registration of script loading states.")
 
         // The performance observer will run the registered handler for resources added before this point and for new ones.
@@ -59,7 +59,7 @@ class Controller {
         const performanceObserver = new PerformanceObserver((list) => {
             list.getEntriesByType("resource").forEach((entry) => {
                 if (entry.initiatorType === "script") {
-                    this.registerScriptStatus(entry.name, entry.responseStatus)
+                    this.handleScriptLoadingStatusChanged(entry.name, entry.responseStatus)
                 }
             })
         })
@@ -89,14 +89,36 @@ class Controller {
         }
     }
 
-    registerScriptStatus(scriptURL, status) {
-        console.debug("Reporting script status", scriptURL, status)
+
+    /*
+     * Handle the loading status of the given script URL changing to the given status code.
+     *
+     * Updates the registry and all elements that are registered as expecting this script URL.
+     */
+    handleScriptLoadingStatusChanged(scriptURL, statusCode) {
+        const entry = this.registerScriptLoadingStatus(scriptURL, statusCode)
+
+        entry.elements.forEach(
+            customElement => {
+                customElement.updateForScriptStatus(statusCode)
+            }
+        )
+    }
+
+    /*
+     * Register loading status for a given script URL.
+     *
+     * Creates or updates a register entry for the given script with the supplied status.
+     * Returns the updated record.
+     */
+    registerScriptLoadingStatus(scriptURL, statusCode) {
+        console.debug("Reporting script status", scriptURL, statusCode)
 
         const entry = this.getOrCreateRegisterEntry(scriptURL)
-        entry.status = status
+        entry.status = statusCode
         this.register.set(scriptURL, entry)
 
-        entry.elements.forEach((customElement) => customElement.updateForScriptStatus(status))
+        return entry
     }
 
     /* Get the RegisterEntry for a script URL, creating it if needed. */
