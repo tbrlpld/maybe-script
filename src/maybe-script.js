@@ -13,45 +13,19 @@ function main() {
     }
     console.debug("Default expected script source:", defaultExpectedScriptSource)
 
-    const controller = getOrCreateController(defaultExpectedScriptSource)
-    const ControlledMaybeScript = createControlledMaybeScript(controller)
-    customElements.define("maybe-script", ControlledMaybeScript)
+    window.maybeScript = new Controller(defaultExpectedScriptSource)
+    customElements.define("maybe-script", MaybeScript)
 }
 
 
 /*
- * Get or create the controller for the MaybeScript elements.
- *
- * If the controller already exists, it is returned.
+ * Get controller or throw an error.
  */
-function getOrCreateController(defaultExpectedScriptSource){
+function getControllerOrThrow(){
     if (!(window.maybeScript instanceof Controller)) {
-        window.maybeScript = new Controller(defaultExpectedScriptSource)
+        throw Error("Controller not available as window.maybeScript")
     }
     return window.maybeScript
-}
-
-
-/*
- * Define MaybeScript subclass with added controller.
- *
- * All elements should make use of the same controller. This could be defined globally, on the window object,
- * but this way we can ensure the controller is set up before any custom element is defined.
- *
- */
-function createControlledMaybeScript(controller) {
-    class ControlledMaybeScript extends MaybeScript {
-        constructor() {
-            super()
-            this.controller = controller
-        }
-
-        connectedCallback() {
-            super.connectedCallback()
-            this.controller.registerCustomElement(this)
-        }
-    }
-    return ControlledMaybeScript
 }
 
 
@@ -169,6 +143,7 @@ class MaybeScript extends HTMLElement {
         // Super constructor returns a reference to the element itself.
         super()
         console.debug("Custom element constructed", this)
+        this.controller = getControllerOrThrow()
 
         this.timeout = 3000
     }
@@ -179,6 +154,8 @@ class MaybeScript extends HTMLElement {
         this.handleInit()
 
         this.setUpTimeout()
+
+        this.controller.registerCustomElement(this)
     }
 
     updateForScriptStatus(status) {
