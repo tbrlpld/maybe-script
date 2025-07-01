@@ -7,7 +7,28 @@ function main() {
     document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
     window.addEventListener("load", () => { console.debug("load")})
 
-    customElements.define("maybe-script", MaybeScript)
+    const controller = getOrCreateController()
+
+    /*
+     * Define MaybeScript subclass with added controller.
+     *
+     * All elements should make use of the same controller. This could be defined globally, on the window object,
+     * but this way we can ensure the controller is set up before any custom element is defined.
+     *
+     */
+    class ControlledMaybeScript extends MaybeScript {
+        constructor() {
+            super()
+            this.controller = controller
+        }
+
+        connectedCallback() {
+            super.connectedCallback()
+            this.controller.registerCustomElement(this)
+        }
+    }
+
+    customElements.define("maybe-script", ControlledMaybeScript)
 }
 
 
@@ -119,8 +140,6 @@ class MaybeScript extends HTMLElement {
         console.debug("Custom element constructed", this)
 
         this.timeout = 3000
-
-        this.controller = getOrCreateController()
     }
 
     connectedCallback() {
@@ -129,8 +148,6 @@ class MaybeScript extends HTMLElement {
         this.handleInit()
 
         this.setUpTimeout()
-
-        this.controller.registerCustomElement(this)
     }
 
     updateForScriptStatus(status) {
