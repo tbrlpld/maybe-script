@@ -40,10 +40,15 @@ class Controller {
 
         this.register = new Map()
 
-        this.setUpScriptStateReporting()
+        this.setUpLoadingStateReportingForExpectedScripts()
     }
 
-    setUpScriptStateReporting() {
+    /*
+     * Set up reporting of loading states for expected scripts.
+     *
+     * When ever the loading status of resource changes, this will trigger the `registerScriptStatus` method.
+     */
+    setUpLoadingStateReportingForExpectedScripts() {
         console.debug("Setting up reporting of script loading states")
         // The performance observer will run the registered handler for resources added before this point and for new ones.
         // This means we can set this up immediately.
