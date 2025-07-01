@@ -19,6 +19,11 @@ function main() {
 }
 
 
+/*
+ * Get or create the controller for the MaybeScript elements.
+ *
+ * If the controller already exists, it is returned.
+ */
 function getOrCreateController(defaultExpectedScriptSource){
     if (!(window.maybeScript instanceof Controller)) {
         window.maybeScript = new Controller(defaultExpectedScriptSource)
@@ -109,7 +114,7 @@ class Controller {
         entry.status = status
         this.register.set(scriptURL, entry)
 
-        entry.elements.forEach((ce) => ce.updateForScriptStatus(status))
+        entry.elements.forEach((customElement) => customElement.updateForScriptStatus(status))
     }
 
     /* Get the RegisterEntry for a script URL, creating it if needed. */
@@ -122,6 +127,12 @@ class Controller {
         return entry
     }
 
+    /*
+     * Get the expected script source from the custom element.
+     *
+     * If the custom element has a `src` attribute, that is used.
+     * Otherwise, the default expected script source of this controller is used.
+     */
     getExpectedScriptSource(maybeScript) {
         let expectedScriptSource = maybeScript.getAttribute("src")
         if (!expectedScriptSource) {
@@ -130,6 +141,9 @@ class Controller {
         return expectedScriptSource
     }
 
+    /*
+     * Convert the given source to an absolute URL on the current document.
+     */
     getAbsoluteSource(source){
         const documentURL = new URL(document.URL)
         const srcURL = new URL(source, documentURL)
@@ -139,6 +153,9 @@ class Controller {
 }
 
 
+/*
+ * Represents a single script entry in the controller's register.
+ */
 class RegisterEntry {
     constructor() {
         this.status = undefined
