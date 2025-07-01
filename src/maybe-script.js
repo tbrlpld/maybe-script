@@ -7,15 +7,21 @@ function main() {
     document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
     window.addEventListener("load", () => { console.debug("load")})
 
-    const controller = getOrCreateController()
+    const defaultExpectedScriptSource = document.currentScript.dataset.expect
+    if (!defaultExpectedScriptSource) {
+        throw Error("No expected script source defined.")
+    }
+    console.debug("Default expected script source:", defaultExpectedScriptSource)
+
+    const controller = getOrCreateController(defaultExpectedScriptSource)
     const ControlledMaybeScript = createControlledMaybeScript(controller)
     customElements.define("maybe-script", ControlledMaybeScript)
 }
 
 
-function getOrCreateController(){
+function getOrCreateController(defaultExpectedScriptSource){
     if (!(window.maybeScript instanceof Controller)) {
-        window.maybeScript = new Controller()
+        window.maybeScript = new Controller(defaultExpectedScriptSource)
     }
     return window.maybeScript
 }
@@ -50,7 +56,9 @@ function responseStatusOk(statusCode) {
 
 
 class Controller {
-    constructor() {
+    constructor(defaultExpectedScriptSource) {
+        this.defaultExpectedScriptSource = defaultExpectedScriptSource
+
         this.register = new Map()
 
         this.setUpScriptStateReporting()
@@ -77,15 +85,16 @@ class Controller {
     registerCustomElement(maybeScript) {
         console.debug("Registering custom element", maybeScript)
 
-        // Convert the `src` to an absolute URL.
+        const expectedScriptSource = this.getExpectedScriptSource(maybeScript)
+
+        // Convert the source to an absolute URL.
         // This is needed because the performance entries use the absolute URL.
-        const scriptURL = this.getAbsoluteSource(maybeScript)
-        if (!scriptURL) return
+        const absoluteURLForExpectedScript = this.getAbsoluteSource(expectedScriptSource)
 
         // Add the custom element to the array of elements interested in this scriptURL.
-        const entry = this.getOrCreateRegisterEntry(scriptURL)
+        const entry = this.getOrCreateRegisterEntry(absoluteURLForExpectedScript)
         entry.addElement(maybeScript)
-        this.register.set(scriptURL, entry)
+        this.register.set(absoluteURLForExpectedScript, entry)
 
         // If we already have a status, we update the new element with that.
         if (entry.status !== undefined) {
@@ -107,17 +116,23 @@ class Controller {
     getOrCreateRegisterEntry(scriptURL) {
         let entry = this.register.get(scriptURL)
         if (entry === undefined) {
+            console.debug("Creating new RegisterEntry for script URL", scriptURL)
             entry = new RegisterEntry()
         }
         return entry
     }
 
-    getAbsoluteSource(maybeScript){
-        const src = maybeScript.getAttribute("src")
-        if (!src) return
+    getExpectedScriptSource(maybeScript) {
+        let expectedScriptSource = maybeScript.getAttribute("src")
+        if (!expectedScriptSource) {
+            expectedScriptSource = this.defaultExpectedScriptSource
+        }
+        return expectedScriptSource
+    }
 
+    getAbsoluteSource(source){
         const documentURL = new URL(document.URL)
-        const srcURL = new URL(src, documentURL)
+        const srcURL = new URL(source, documentURL)
 
         return srcURL.href
     }
