@@ -8,14 +8,27 @@ function main() {
     window.addEventListener("load", () => { console.debug("load")})
 
     const controller = getOrCreateController()
+    const ControlledMaybeScript = createControlledMaybeScript(controller)
+    customElements.define("maybe-script", ControlledMaybeScript)
+}
 
-    /*
-     * Define MaybeScript subclass with added controller.
-     *
-     * All elements should make use of the same controller. This could be defined globally, on the window object,
-     * but this way we can ensure the controller is set up before any custom element is defined.
-     *
-     */
+
+function getOrCreateController(){
+    if (!(window.maybeScript instanceof Controller)) {
+        window.maybeScript = new Controller()
+    }
+    return window.maybeScript
+}
+
+
+/*
+ * Define MaybeScript subclass with added controller.
+ *
+ * All elements should make use of the same controller. This could be defined globally, on the window object,
+ * but this way we can ensure the controller is set up before any custom element is defined.
+ *
+ */
+function createControlledMaybeScript(controller) {
     class ControlledMaybeScript extends MaybeScript {
         constructor() {
             super()
@@ -27,16 +40,7 @@ function main() {
             this.controller.registerCustomElement(this)
         }
     }
-
-    customElements.define("maybe-script", ControlledMaybeScript)
-}
-
-
-function getOrCreateController(){
-    if (!(window.maybeScript instanceof Controller)) {
-        window.maybeScript = new Controller()
-    }
-    return window.maybeScript
+    return ControlledMaybeScript
 }
 
 
@@ -132,7 +136,6 @@ class RegisterEntry {
 }
 
 
-// noinspection JSUnusedGlobalSymbols
 class MaybeScript extends HTMLElement {
     constructor() {
         // Super constructor returns a reference to the element itself.
@@ -237,10 +240,6 @@ class MaybeScript extends HTMLElement {
         console.debug("Showing", this)
         this.removeAttribute("hidden")
     }
-}
-
-
-class MaybeScriptControllerNotSetUp extends Error {
 }
 
 
