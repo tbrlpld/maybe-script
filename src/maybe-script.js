@@ -261,7 +261,7 @@ class MaybeScript extends HTMLElement {
         console.debug("maybe-script element is handling script status", this, status_code)
 
         if (is_status_code_indicating_successful_script_loading(status_code)) {
-            this.handleSuccess()
+            this.handle_expected_script_loading_success()
 
             // If the script was successful, it might need to so some work before this element should
             // change visibility. We set up a handler for the document load event that can be used
@@ -287,8 +287,8 @@ class MaybeScript extends HTMLElement {
         this.runAttributeAction("on:init")
     }
 
-    handleSuccess() {
-        console.debug("Awaited script loaded successfully. Handling it...", this)
+    handle_expected_script_loading_success() {
+        console.debug("Expected script loaded successfully. Handling it...", this)
         this.runAttributeAction("on:success")
     }
 
@@ -299,7 +299,7 @@ class MaybeScript extends HTMLElement {
      * but also had time to run.
      */
     handleLoadAfterSuccess() {
-        console.debug("Document loaded after awaited script was successfully loaded. Handling it...", this)
+        console.debug("Document loaded after expected script was successfully loaded. Handling it...", this)
         this.runAttributeAction("on:load-after-success")
     }
 
