@@ -22,13 +22,10 @@
                     We are only warning because the user might want to define an override on each element.
                     But, we are warning because it seems like an oversight.
                 </p>
-                <p>
-                    If the user means to not define a default expected script, it should be <a href="./explicit.html">explicitly</a> declared.
-                </p>
             </div>
 
             <div class="test-case__column">
-                <h3>And the element DOES NOT define an override, the box below should contain something</h3>
+                <h3>And when the element DOES NOT define an override, the box below should contain something</h3>
 
                 <p>That is because there is not expected script to whose loading it could respond.</p>
 
@@ -49,7 +46,7 @@
             </div>
 
             <div class="test-case__column">
-                <h3>And the element DOES define an override, the bow below should be empty</h3>
+                <h3>And when the element DOES define an override, the bow below should be empty</h3>
 
                 <div class="test-case__output-box">
                     <maybe-script src="/main.js" on:success="hide">
