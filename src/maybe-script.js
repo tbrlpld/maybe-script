@@ -255,10 +255,10 @@ class MaybeScript extends HTMLElement {
     }
 
     /*
-     * Handle the
+     * Handle the status code of the loading of the expected script.
      */
     handle_expected_script_loading_status(status_code) {
-        console.debug("Updating maybe-script element for script status", this, status_code)
+        console.debug("maybe-script element is handling script status", this, status_code)
 
         if (is_status_code_indicating_successful_script_loading(status_code)) {
             this.handleSuccess()
