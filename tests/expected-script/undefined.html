@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Default expected script | maybe-script</title>
+    <script src="http://localhost:8001/maybe-script.js"></script>
+    <script src="/main.js"></script>
+</head>
+<body>
+    <a href=".">Back</a>
+
+    <h1>When no default expected script is defined...</h1>
+
+    <div class="test-case">
+
+        <div class="test-case__columns-container">
+            <div class="test-case__column">
+                <h3>And the element DOES NOT define an override, the box below should contain something</h3>
+
+                <p>That is because there is not expected script to whose loading it could respond.</p>
+
+                <div class="test-case__output-box">
+                    <maybe-script on:success="show">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
+                    <maybe-script on:failure="show">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+
+            <div class="test-case__column">
+                <h3>And the element DOES define an override, the bow below should be empty</h3>
+
+                <div class="test-case__output-box">
+                    <maybe-script src="/main.js" on:success="hide">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

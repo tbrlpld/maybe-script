@@ -9,7 +9,8 @@ function main() {
 
     const default_expected_script_url = document.currentScript.dataset.expect
     if (!default_expected_script_url) {
-        throw Error("No expected script URL defined.")
+        // Showing warning in console
+        console.warn("No default expected script URL defined.")
     }
     console.debug("Default expected script URL:", default_expected_script_url)
 
@@ -164,6 +165,9 @@ class Controller {
         console.debug("Registering maybe-script element", maybe_script_element)
 
         const expected_script_url = this.get_expected_script_url_for_maybe_script_element(maybe_script_element)
+        if (!expected_script_url) {
+            throw Error("No expected script URL found for element. Define default or on element.")
+        }
 
         // Convert the script URL to an absolute URL.
         // This is needed because the performance entries are reported for absolute URLs.
