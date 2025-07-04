@@ -7,13 +7,13 @@ function main() {
     document.addEventListener("DOMContentLoaded", () => { console.debug("DOMContentLoaded")})
     window.addEventListener("load", () => { console.debug("load")})
 
-    const defaultExpectedScriptSource = document.currentScript.dataset.expect
-    if (!defaultExpectedScriptSource) {
+    const default_expected_script_url = document.currentScript.dataset.expect
+    if (!default_expected_script_url) {
         throw Error("No expected script source defined.")
     }
-    console.debug("Default expected script source:", defaultExpectedScriptSource)
+    console.debug("Default expected script source:", default_expected_script_url)
 
-    window.maybeScript = new Controller(defaultExpectedScriptSource)
+    window.maybe_script = new Controller(default_expected_script_url)
     customElements.define("maybe-script", MaybeScript)
 }
 
@@ -21,86 +21,89 @@ function main() {
 /*
  * Get controller or throw an error.
  */
-function getControllerOrThrow(){
-    if (!(window.maybeScript instanceof Controller)) {
+function get_controller_or_throw(){
+    if (!(window.maybe_script instanceof Controller)) {
         throw Error("Controller not available as window.maybeScript")
     }
-    return window.maybeScript
+    return window.maybe_script
 }
 
 
-function responseStatusOk(statusCode) {
-    return statusCode >= 200 && statusCode <300
+/*
+ * Check if the given status code is consider a successful loading state for a script.
+ */
+function is_status_code_indicating_successful_script_loading(status_code) {
+    return status_code >= 200 && status_code <300
 }
 
 
+/*
+ * Controller to inform maybe-script custom elements about script loading states.
+ *
+ * This controller needs to be available as `window.maybe_script`.
+ * Custom `<maybe-script>` elements register themselves with that controller.
+ * The controller ensures that the element is updated once a loading state for
+ * its expected script has been determined.
+ * The updating of the custom element might happen directly during the
+ * registration, if the script loading state is already known, or it will
+ * happen as soon as the script finishes loading.
+ */
 class Controller {
-    constructor(defaultExpectedScriptSource) {
-        this.defaultExpectedScriptSource = defaultExpectedScriptSource
+    constructor(default_expected_script_url) {
+        this.default_expected_script_url = default_expected_script_url
 
         this.register = new Map()
 
-        this.setUpScriptLoadingStateHandling()
+        this.set_up_script_loading_state_change_handling()
     }
 
     /*
      * Set up handling of loading states for scripts.
      *
-     * Whenever the loading status of script resource changes the `registerScriptStatus` method is called.
-     * We are registering the loading state changes for all script resources,
-     * regardless of them being "expected" scripts or not.
-     * Registering the loading states for all script resources ensures that the order of loading script and creating custom elements that expect them does not matter.
+     * This sets up the tracking of loading statuses of script resources.
+     * The tracking is set up, so that the loading status change handler is called
+     * as soon as the information is available.
+     *
+     * The tracking of loading statuses is enabled for all script resources, regardless
+     * if any custom elements have them as "expected scripts" or not.
+     *
+     * The benefit here is that we can configure this before any custom elements are created.
      */
-    setUpScriptLoadingStateHandling() {
-        console.debug("Setting up registration of script loading states.")
+    set_up_script_loading_state_change_handling() {
+        console.debug("Setting up handling of script loading state changes.")
 
-        // The performance observer will run the registered handler for resources added before this point and for new ones.
-        // This means we can set this up immediately.
-        const performanceObserver = new PerformanceObserver((list) => {
+        // Configure a performance observer with a callback that calls the loading state
+        // handler method on the controller for each new performance entry related to script resources.
+        const performance_observer = new PerformanceObserver((list) => {
             list.getEntriesByType("resource").forEach((entry) => {
+                // Performance entries related to resources contain the response status code for
+                // the loading response of the resource.
+                // This can tell us if the script loaded successfully or not.
                 if (entry.initiatorType === "script") {
-                    this.handleScriptLoadingStatusChanged(entry.name, entry.responseStatus)
+                    this.handle_script_loading_state_change(entry.name, entry.responseStatus)
                 }
             })
         })
-        // Buffered makes sure we get historic entries.
-        performanceObserver.observe({type: "resource", buffered: true})
+        // The `buffered` option means that we run the handler even for
+        // resource entries that exist when we start observing.
+        performance_observer.observe({type: "resource", buffered: true})
 
-        console.debug("Setting up reporting of script loading states -- DONE.")
+        console.debug("Setting up handling of script loading state changes -- DONE.")
     }
-
-    registerCustomElement(maybeScript) {
-        console.debug("Registering custom element", maybeScript)
-
-        const expectedScriptSource = this.getExpectedScriptSource(maybeScript)
-
-        // Convert the source to an absolute URL.
-        // This is needed because the performance entries use the absolute URL.
-        const absoluteURLForExpectedScript = this.getAbsoluteSource(expectedScriptSource)
-
-        // Add the custom element to the array of elements interested in this scriptURL.
-        const entry = this.getOrCreateRegisterEntry(absoluteURLForExpectedScript)
-        entry.elements.push(maybeScript)
-        this.register.set(absoluteURLForExpectedScript, entry)
-
-        // If we already have a status, we update the new element with that.
-        if (entry.status !== undefined) {
-            maybeScript.updateForScriptStatus(entry.status)
-        }
-    }
-
 
     /*
-     * Handle the loading status of the given script URL changing to the given status code.
+     * Handle the loading state change of the given script URL.
      *
      * Updates the registry and all elements that are registered as expecting this script URL.
+     * We register the script loading states, so that we can look up the loading state later,
+     * when an element that expects the script is added after the loading state
+     * change has already been handled.
      */
-    handleScriptLoadingStatusChanged(scriptURL, statusCode) {
-        const entry = this.registerScriptLoadingStatus(scriptURL, statusCode)
-
+    handle_script_loading_state_change(script_url, status_code) {
+        const entry = this.register_script_loading_status(script_url, status_code)
         entry.elements.forEach(
             customElement => {
-                customElement.updateForScriptStatus(statusCode)
+                customElement.updateForScriptStatus(status_code)
             }
         )
     }
@@ -110,22 +113,75 @@ class Controller {
      *
      * Creates or updates a register entry for the given script with the supplied status.
      * Returns the updated record.
+     *
+     * We need to "get or create" because we don't know if the script status is
+     * registered first, or if some elements have already registered themselves
+     * as expecting the script.
      */
-    registerScriptLoadingStatus(scriptURL, statusCode) {
-        console.debug("Reporting script status", scriptURL, statusCode)
+    register_script_loading_status(script_url, status_code) {
+        console.debug("Registering script status", script_url, status_code)
 
-        const entry = this.getOrCreateRegisterEntry(scriptURL)
-        entry.status = statusCode
-        this.register.set(scriptURL, entry)
+        const entry = this.get_or_create_register_entry(script_url)
+        entry.status = status_code
+        this.register.set(script_url, entry)
+
+        return entry
+    }
+
+    /*
+     * Handle a maybe-script element being connected to the DOM.
+     *
+     * We register the custom element as expecting a certain script (its own or the default).
+     *
+     * If we already have the loading state for that script, we let the element handle that
+     * loading state.
+     *
+     * The custom element is registered so that we can update the element
+     * as soon as the loading state of its expected script is known.
+     */
+    handle_maybe_script_element_connected(maybe_script_element) {
+        const entry = this.register_maybe_script_element(maybe_script_element)
+
+        // If we already have a status, we update the new element with that.
+        if (entry.status !== null) {
+            maybe_script_element.updateForScriptStatus(entry.status)
+        }
+    }
+
+    /*
+     * Register the maybe-script element.
+     *
+     * The custom element is registered so that we can update the element
+     * as soon as the loading state of its expected script is known.
+     *
+     * If the custom element does not define an expected script itself,
+     * it will be registered for the default expected script of the
+     * controller.
+     *
+     * Returns the created or updated entry.
+     */
+    register_maybe_script_element(maybe_script_element) {
+        console.debug("Registering maybe-script element", maybe_script_element)
+
+        const expected_script_url = this.get_expected_script_url_for_maybe_script_element(maybe_script_element)
+
+        // Convert the script URL to an absolute URL.
+        // This is needed because the performance entries are reported for absolute URLs.
+        const expected_script_absolute_url = this.get_absolute_url(expected_script_url)
+
+        // Add the custom element to the array of elements interested in this scriptURL.
+        const entry = this.get_or_create_register_entry(expected_script_absolute_url)
+        entry.elements.push(maybe_script_element)
+        this.register.set(expected_script_absolute_url, entry)
 
         return entry
     }
 
     /* Get the RegisterEntry for a script URL, creating it if needed. */
-    getOrCreateRegisterEntry(scriptURL) {
-        let entry = this.register.get(scriptURL)
+    get_or_create_register_entry(script_url) {
+        let entry = this.register.get(script_url)
         if (entry === undefined) {
-            console.debug("Creating new RegisterEntry for script URL", scriptURL)
+            console.debug("Creating new RegisterEntry for script URL", script_url)
             entry = new RegisterEntry()
         }
         return entry
@@ -137,22 +193,23 @@ class Controller {
      * If the custom element has a `src` attribute, that is used.
      * Otherwise, the default expected script source of this controller is used.
      */
-    getExpectedScriptSource(maybeScript) {
-        let expectedScriptSource = maybeScript.getAttribute("src")
-        if (!expectedScriptSource) {
-            expectedScriptSource = this.defaultExpectedScriptSource
+    get_expected_script_url_for_maybe_script_element(maybe_script_element) {
+        let expected_script_url = maybe_script_element.getAttribute("src")
+        if (!expected_script_url) {
+            expected_script_url = this.default_expected_script_url
         }
-        return expectedScriptSource
+        return expected_script_url
     }
 
     /*
-     * Convert the given source to an absolute URL on the current document.
+     * Convert the given URL to an absolute URL on the current document.
+     *
+     * If the given URL is already absolute, the URL is returned as is.
      */
-    getAbsoluteSource(source){
-        const documentURL = new URL(document.URL)
-        const srcURL = new URL(source, documentURL)
+    get_absolute_url(url){
+        const absolute_url = new URL(url, document.URL)
 
-        return srcURL.href
+        return absolute_url.href
     }
 }
 
@@ -161,9 +218,9 @@ class Controller {
  * Represents a single script entry in the controller's register.
  */
 class RegisterEntry {
-    constructor() {
-        this.status = undefined
-        this.elements = []
+    constructor(status = null, elements = []) {
+        this.status = status
+        this.elements = elements
     }
 }
 
@@ -173,8 +230,8 @@ class MaybeScript extends HTMLElement {
         // Super constructor returns a reference to the element itself.
         super()
         console.debug("Custom element constructed", this)
-        this.controller = getControllerOrThrow()
 
+        this.controller = get_controller_or_throw()
         this.timeout = 3000
     }
 
@@ -185,13 +242,13 @@ class MaybeScript extends HTMLElement {
 
         this.setUpTimeout()
 
-        this.controller.registerCustomElement(this)
+        this.controller.handle_maybe_script_element_connected(this)
     }
 
     updateForScriptStatus(status) {
         console.debug("Updating custom element for script status", this, status)
 
-        if (responseStatusOk(status)) {
+        if (is_status_code_indicating_successful_script_loading(status)) {
             this.handleSuccess()
 
             window.addEventListener("load", () => {this.handleLoadAfterSuccess()})
