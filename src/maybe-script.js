@@ -245,7 +245,7 @@ class MaybeScript extends HTMLElement {
         // expected script to be reported. The element can be configured to a
         // specific visibility at the cut-off time. By default, the visibility of
         // the failure case is used.
-        this.set_up_maximum_waittime_for_expected_script_loading()
+        this.set_up_maximum_wait_time_for_expected_script_loading()
 
         // Let the controller know of this element, so that the controller can
         // inform the element once the expected script loading state is known.
