@@ -308,8 +308,8 @@ class MaybeScript extends HTMLElement {
         this.runAttributeAction("on:failure")
     }
 
-    handleTimeout() {
-        console.log("Timeout reached. Handling it...", this)
+    handle_expected_script_loading_took_too_long() {
+        console.log("Expected script took too long to load. Handling it...", this)
         const timeoutAttr = "on:timeout"
         if (this.hasAttribute(timeoutAttr)) {
             this.runAttributeAction(timeoutAttr)}
@@ -323,7 +323,7 @@ class MaybeScript extends HTMLElement {
         if (timeout !== null) {
             this.timeout = timeout
         }
-        this.timer = setTimeout(() => {this.handleTimeout()}, this.timeout)
+        this.timer = setTimeout(() => {this.handle_expected_script_loading_took_too_long()}, this.timeout)
     }
 
     clearTimeout() {
