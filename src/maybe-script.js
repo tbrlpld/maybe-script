@@ -38,13 +38,13 @@ function is_status_code_indicating_successful_script_loading(status_code) {
 
 
 /*
- * Controller to inform maybe-script custom elements about script loading states.
+ * Controller to inform maybe-script elements about script loading states.
  *
  * This controller needs to be available as `window.maybe_script`.
  * Custom `<maybe-script>` elements register themselves with that controller.
  * The controller ensures that the element is updated once a loading state for
  * its expected script has been determined.
- * The updating of the custom element might happen directly during the
+ * The updating of the maybe-script element might happen directly during the
  * registration, if the script loading state is already known, or it will
  * happen as soon as the script finishes loading.
  */
@@ -65,9 +65,9 @@ class Controller {
      * as soon as the information is available.
      *
      * The tracking of loading statuses is enabled for all script resources, regardless
-     * if any custom elements have them as "expected scripts" or not.
+     * if any maybe-script elements have them as "expected scripts" or not.
      *
-     * The benefit here is that we can configure this before any custom elements are created.
+     * The benefit here is that we can configure this before any maybe-script elements are created.
      */
     set_up_handling_of_script_loading_status() {
         console.debug("Setting up handling of script loading state changes.")
@@ -131,12 +131,12 @@ class Controller {
     /*
      * Handle a maybe-script element being connected to the DOM.
      *
-     * We register the custom element as expecting a certain script (its own or the default).
+     * We register the maybe-script element as expecting a certain script (its own or the default).
      *
      * If we already have the loading state for that script, we let the element handle that
      * loading state.
      *
-     * The custom element is registered so that we can update the element
+     * The maybe-script element is registered so that we can update the element
      * as soon as the loading state of its expected script is known.
      */
     handle_maybe_script_element_connected(maybe_script_element) {
@@ -151,10 +151,10 @@ class Controller {
     /*
      * Register the maybe-script element.
      *
-     * The custom element is registered so that we can update the element
+     * The maybe-script element is registered so that we can update the element
      * as soon as the loading state of its expected script is known.
      *
-     * If the custom element does not define an expected script itself,
+     * If the maybe-script element does not define an expected script itself,
      * it will be registered for the default expected script of the
      * controller.
      *
@@ -169,7 +169,7 @@ class Controller {
         // This is needed because the performance entries are reported for absolute URLs.
         const expected_script_absolute_url = this.get_absolute_url(expected_script_url)
 
-        // Add the custom element to the array of elements interested in this scriptURL.
+        // Add the maybe-script element to the array of elements interested in this scriptURL.
         const entry = this.get_or_create_register_entry(expected_script_absolute_url)
         entry.elements.push(maybe_script_element)
         this.register.set(expected_script_absolute_url, entry)
@@ -188,9 +188,9 @@ class Controller {
     }
 
     /*
-     * Get the expected script source from the custom element.
+     * Get the expected script source from the maybe-script element.
      *
-     * If the custom element has a `src` attribute, that is used.
+     * If the maybe-script element has a `src` attribute, that is used.
      * Otherwise, the default expected script source of this controller is used.
      */
     get_expected_script_url_for_maybe_script_element(maybe_script_element) {
@@ -229,7 +229,7 @@ class MaybeScript extends HTMLElement {
     constructor() {
         // Super constructor returns a reference to the element itself.
         super()
-        console.debug("Custom element constructed", this)
+        console.debug("maybe-script element constructed", this)
 
         this.controller = get_controller_or_throw()
         this.wait_max = 3000
@@ -347,7 +347,7 @@ class MaybeScript extends HTMLElement {
     }
 
     run_attribute_action(attr) {
-        console.debug("Updating custom element with attribute action...", this, attr)
+        console.debug("Updating maybe-script element with attribute action...", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
             console.debug(`No action defined for ${attr}`, this)
