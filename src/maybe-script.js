@@ -54,7 +54,7 @@ class Controller {
 
         this.register = new Map()
 
-        this.set_up_script_loading_state_change_handling()
+        this.set_up_handling_of_script_loading_status()
     }
 
     /*
@@ -69,7 +69,7 @@ class Controller {
      *
      * The benefit here is that we can configure this before any custom elements are created.
      */
-    set_up_script_loading_state_change_handling() {
+    set_up_handling_of_script_loading_status() {
         console.debug("Setting up handling of script loading state changes.")
 
         // Configure a performance observer with a callback that calls the loading state
@@ -80,7 +80,7 @@ class Controller {
                 // the loading response of the resource.
                 // This can tell us if the script loaded successfully or not.
                 if (entry.initiatorType === "script") {
-                    this.handle_script_loading_state_change(entry.name, entry.responseStatus)
+                    this.handle_script_loading_status(entry.name, entry.responseStatus)
                 }
             })
         })
@@ -99,11 +99,11 @@ class Controller {
      * when an element that expects the script is added after the loading state
      * change has already been handled.
      */
-    handle_script_loading_state_change(script_url, status_code) {
+    handle_script_loading_status(script_url, status_code) {
         const entry = this.register_script_loading_status(script_url, status_code)
         entry.elements.forEach(
-            customElement => {
-                customElement.updateForScriptStatus(status_code)
+            maybe_script_element => {
+                maybe_script_element.handle_expected_script_loading_status(status_code)
             }
         )
     }
@@ -144,7 +144,7 @@ class Controller {
 
         // If we already have a status, we update the new element with that.
         if (entry.status !== null) {
-            maybe_script_element.updateForScriptStatus(entry.status)
+            maybe_script_element.handle_expected_script_loading_status(entry.status)
         }
     }
 
@@ -242,15 +242,25 @@ class MaybeScript extends HTMLElement {
 
         this.setUpTimeout()
 
+        // Let the controller know of this element, so that the controller can
+        // inform the element once the expected script loading state is known.
+        // TODO: Consider other options for this two way communication. This
+        //       two-way coupling feels dirty somehow.
         this.controller.handle_maybe_script_element_connected(this)
     }
 
-    updateForScriptStatus(status) {
-        console.debug("Updating custom element for script status", this, status)
+    /*
+     * Handle the
+     */
+    handle_expected_script_loading_status(status_code) {
+        console.debug("Updating maybe-script element for script status", this, status_code)
 
-        if (is_status_code_indicating_successful_script_loading(status)) {
+        if (is_status_code_indicating_successful_script_loading(status_code)) {
             this.handleSuccess()
 
+            // If the script was successful, it might need to so some work before this element should
+            // change visibility. We set up a handler for the document load event that can be used
+            // to define the visibility after the load event.
             window.addEventListener("load", () => {this.handleLoadAfterSuccess()})
         } else {
             this.handleFailure()
