@@ -236,10 +236,15 @@ class MaybeScript extends HTMLElement {
     }
 
     connectedCallback() {
-        console.debug("Custom element connected", this)
+        console.debug("Maybe-script element connected", this)
 
-        this.handleInit()
+        // Set initial visibility.
+        this.set_initial_visibility()
 
+        // Create a cut-off point for how long we wait for the loading state of the
+        // expected script to be reported. The element can be configured to a
+        // specific visibility at the cut-off time. By default, the visibility of
+        // the failure case is used.
         this.setUpTimeout()
 
         // Let the controller know of this element, so that the controller can
@@ -270,8 +275,15 @@ class MaybeScript extends HTMLElement {
         this.clearTimeout()
     }
 
-    handleInit() {
-        console.debug("Custom element initialized. Handling it...", this)
+    /*
+     * Set the initial visibility of the element.
+     *
+     * Note: this is already the second step. This step only runs when JS is available.
+     * To configure the immediate visibility for the no-JS case, directly apply (or not)
+     * the `hidden` attribute to the element.
+     */
+    set_initial_visibility() {
+        console.debug("Setting initial visibility of maybe-script element...", this)
         this.runAttributeAction("on:init")
     }
 
