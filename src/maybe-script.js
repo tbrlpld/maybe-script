@@ -9,9 +9,9 @@ function main() {
 
     const default_expected_script_url = document.currentScript.dataset.expect
     if (!default_expected_script_url) {
-        throw Error("No expected script source defined.")
+        throw Error("No expected script URL defined.")
     }
-    console.debug("Default expected script source:", default_expected_script_url)
+    console.debug("Default expected script URL:", default_expected_script_url)
 
     window.maybe_script = new Controller(default_expected_script_url)
     customElements.define("maybe-script", MaybeScript)
@@ -188,10 +188,10 @@ class Controller {
     }
 
     /*
-     * Get the expected script source from the maybe-script element.
+     * Get the expected script URL from the maybe-script element.
      *
      * If the maybe-script element has a `src` attribute, that is used.
-     * Otherwise, the default expected script source of this controller is used.
+     * Otherwise, the default expected script URL of this controller is used.
      */
     get_expected_script_url_for_maybe_script_element(maybe_script_element) {
         let expected_script_url = maybe_script_element.getAttribute("src")
