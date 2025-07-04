@@ -284,12 +284,12 @@ class MaybeScript extends HTMLElement {
      */
     set_initial_visibility() {
         console.debug("Setting initial visibility of maybe-script element...", this)
-        this.runAttributeAction("on:init")
+        this.run_attribute_action("on:init")
     }
 
     handle_expected_script_loading_succeeded() {
         console.debug("Expected script loaded successfully. Handling it...", this)
-        this.runAttributeAction("on:success")
+        this.run_attribute_action("on:success")
     }
 
     /*
@@ -300,12 +300,12 @@ class MaybeScript extends HTMLElement {
      */
     handle_document_load_after_expected_script_loaded_successful() {
         console.debug("Document loaded after expected script was successfully loaded. Handling it...", this)
-        this.runAttributeAction("on:load-after-success")
+        this.run_attribute_action("on:load-after-success")
     }
 
     handle_expected_script_loading_failed() {
         console.debug("Expected script failed to load. Handling it...", this)
-        this.runAttributeAction("on:failure")
+        this.run_attribute_action("on:failure")
     }
 
     /*
@@ -335,9 +335,9 @@ class MaybeScript extends HTMLElement {
         console.log("Expected script took too long to load. Handling it...", this)
         const max_wait_attr = "on:max-wait"
         if (this.hasAttribute(max_wait_attr)) {
-            this.runAttributeAction(max_wait_attr)}
+            this.run_attribute_action(max_wait_attr)}
         else {
-            this.runAttributeAction("on:failure")
+            this.run_attribute_action("on:failure")
         }
     }
 
@@ -346,7 +346,7 @@ class MaybeScript extends HTMLElement {
         clearTimeout(this.timer)
     }
 
-    runAttributeAction(attr) {
+    run_attribute_action(attr) {
         console.debug("Updating custom element with attribute action...", this, attr)
         const value = this.getAttribute(attr)
         if (value == null) {
