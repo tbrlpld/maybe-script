@@ -232,7 +232,7 @@ class MaybeScript extends HTMLElement {
         console.debug("Custom element constructed", this)
 
         this.controller = get_controller_or_throw()
-        this.timeout = 3000
+        this.wait_max = 3000
     }
 
     connectedCallback() {
@@ -245,7 +245,7 @@ class MaybeScript extends HTMLElement {
         // expected script to be reported. The element can be configured to a
         // specific visibility at the cut-off time. By default, the visibility of
         // the failure case is used.
-        this.setUpTimeout()
+        this.set_up_maximum_waittime_for_expected_script_loading()
 
         // Let the controller know of this element, so that the controller can
         // inform the element once the expected script loading state is known.
@@ -272,7 +272,7 @@ class MaybeScript extends HTMLElement {
         }
 
         // We already got our result. No need to wait anymore.
-        this.clearTimeout()
+        this.stop_waiting()
     }
 
     /*
@@ -308,25 +308,40 @@ class MaybeScript extends HTMLElement {
         this.runAttributeAction("on:failure")
     }
 
+    /*
+     * Set up maximum wait time for expected script loading to finish.
+     *
+     * By default, a maximum wait time of 3s is used. Each element can override
+     * the maximum wait time with the `wait-max` attribute.
+     *
+     * If the maximum wait time is reached, a specific handler is called.
+     */
+    set_up_maximum_wait_time_for_expected_script_loading() {
+        const wait_max = this.getAttribute("wait-max")
+        if (wait_max) {
+            // Update prop with attribute value, if defined.
+            this.wait_max = Number(wait_max)
+        }
+        this.timer = setTimeout(() => {this.handle_expected_script_loading_took_too_long()}, this.wait_max)
+    }
+
+    /*
+     * Handle the expected script taking too long to load.
+     *
+     * If a custom visibility change is defined, we use that, otherwise,
+     * we treat it like the failure case.
+     */
     handle_expected_script_loading_took_too_long() {
         console.log("Expected script took too long to load. Handling it...", this)
-        const timeoutAttr = "on:timeout"
-        if (this.hasAttribute(timeoutAttr)) {
-            this.runAttributeAction(timeoutAttr)}
+        const max_wait_attr = "on:max-wait"
+        if (this.hasAttribute(max_wait_attr)) {
+            this.runAttributeAction(max_wait_attr)}
         else {
             this.runAttributeAction("on:failure")
         }
     }
 
-    setUpTimeout() {
-        const timeout = this.getAttribute("timeout")
-        if (timeout !== null) {
-            this.timeout = timeout
-        }
-        this.timer = setTimeout(() => {this.handle_expected_script_loading_took_too_long()}, this.timeout)
-    }
-
-    clearTimeout() {
+    stop_waiting() {
         if (!this.timer) return
         clearTimeout(this.timer)
     }
