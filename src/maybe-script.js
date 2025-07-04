@@ -266,7 +266,7 @@ class MaybeScript extends HTMLElement {
             // If the script was successful, it might need to so some work before this element should
             // change visibility. We set up a handler for the document load event that can be used
             // to define the visibility after the load event.
-            window.addEventListener("load", () => {this.handleLoadAfterSuccess()})
+            window.addEventListener("load", () => {this.handle_document_load_after_expected_script_loaded_successful()})
         } else {
             this.handleFailure()
         }
@@ -295,10 +295,10 @@ class MaybeScript extends HTMLElement {
     /*
      * Handle the load event after successful loading of a script.
      *
-     * This may be helpful when an action should be delayed until the script has not only been loaded,
-     * but also had time to run.
+     * This may be helpful when the visibility change should be delayed until the
+     * expected script has not only been loaded, but also had time to run.
      */
-    handleLoadAfterSuccess() {
+    handle_document_load_after_expected_script_loaded_successful() {
         console.debug("Document loaded after expected script was successfully loaded. Handling it...", this)
         this.runAttributeAction("on:load-after-success")
     }
