@@ -23,7 +23,7 @@ function main() {
  */
 function get_controller_or_throw(){
     if (!(window.maybe_script instanceof Controller)) {
-        throw Error("Controller not available as window.maybeScript")
+        throw Error("Controller not available as window.maybe_script")
     }
     return window.maybe_script
 }
