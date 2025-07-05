@@ -34,7 +34,7 @@ a {
 }
 
 .test-case__column {
-    flex-grow: 1;
+    flex: 1;
 }
 
 .test-case__output-box {
