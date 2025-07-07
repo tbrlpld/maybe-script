@@ -101,6 +101,7 @@ class Controller {
      * change has already been handled.
      */
     handle_script_loading_status(script_url, status_code) {
+        console.debug("Handling script URL loading status:", script_url, status_code)
         const entry = this.register_script_loading_status(script_url, status_code)
         entry.elements.forEach(
             maybe_script_element => {
@@ -177,6 +178,7 @@ class Controller {
         const entry = this.get_or_create_register_entry(expected_script_absolute_url)
         entry.elements.push(maybe_script_element)
         this.register.set(expected_script_absolute_url, entry)
+        console.debug("Registered element as expecting URL:", maybe_script_element, expected_script_absolute_url)
 
         return entry
     }
