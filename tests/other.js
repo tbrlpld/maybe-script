@@ -1,1 +1,1 @@
-console.debug("Hello from main.js!");
+console.debug("Hello from other.js!");
