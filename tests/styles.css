@@ -22,6 +22,10 @@ a {
     }
 }
 
+p {
+    max-width: 80ch;
+}
+
 
 .test-case {
 }
