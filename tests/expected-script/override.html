@@ -7,11 +7,24 @@
     <title>Default expected script | maybe-script</title>
     <script src="http://localhost:8001/maybe-script.js" data-expect="/main.js"></script>
     <script src="/main.js"></script>
+    <script src="/other.js"></script>
+    <script src="/does-not-exist.js"></script>  <!-- This simulates a script that fails to load. -->
 </head>
 <body>
     <a href=".">Back</a>
 
     <h1>Given the maybe-script element overrides the expected script...</h1>
+
+    <p>
+        Sometimes, you have scripts that are only needed on certain pages.
+        E.g. if this feature needs a lot of JS, but not all users use this feature or visit pages with this feature.
+        To optimize your bundle size, you might split the feature into a separate file and only load it on the pages that need it.
+    </p>
+
+    <p>
+        On pages with that special feature, that load that separate script, you might also have elements that you only want to show or hide depending on the loading status of the feature script.
+        To allow that, each element can define a separate script URL as the expected script to use for only this element.
+    </p>
 
     <div class="test-case">
         <h2>And given the override expected script loads successfully...</h2>
