@@ -14,23 +14,32 @@
     <h1>Given no default expected script is defined...</h1>
 
     <div class="test-case">
+        <h2>Then there should be a warning in the console</h2>
+
+        <p>
+            We are only warning because the user might want to define an override on each element.
+            But, we are warning because it seems like an oversight.
+        </p>
+    </div>
+
+    <div class="test-case">
+        <h2>Then the elements visibility depends on the initial state...</h2>
+
+        <p>
+            That is because the element immediately shows and there is no expected script to whose loading it could respond.
+        </p>
+
         <div class="test-case__columns-container">
             <div class="test-case__column">
-                <h3>Then there should be a warning in the console</h3>
-
-                <p>
-                    We are only warning because the user might want to define an override on each element.
-                    But, we are warning because it seems like an oversight.
-                </p>
-            </div>
-
-            <div class="test-case__column">
-                <h3 class="test-case__column-heading">And given the element DOES NOT define an override, then the box below should contain something</h3>
-
-                <p>That is because there is not expected script to whose loading it could respond.</p>
+                <h3 class="test-case__column-heading">And then the box below should contain 4 checks</h3>
 
                 <div class="test-case__output-box">
                     <maybe-script on:success="show">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
+                    <maybe-script on:success="hide">
                         <div>
                             ✅
                         </div>
@@ -40,21 +49,43 @@
                             ✅
                         </div>
                     </maybe-script>
+                    <maybe-script on:failure="hide">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
                 </div>
 
-                <p>There will also be errors in the console.</p>
+                <p>There will also be errors in the console for each element.</p>
             </div>
 
             <div class="test-case__column">
-                <h3 class="test-case__column-heading">And given the element DOES define an override, then the bow below should be empty</h3>
+                <h3 class="test-case__column-heading">And then the box below should be empty</h3>
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/main.js" on:success="hide">
+                    <maybe-script hidden on:success="show">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                    <maybe-script hidden on:success="hide">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                    <maybe-script hidden on:failure="show">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                    <maybe-script hidden on:failure="hide">
                         <div>
                             ❌
                         </div>
                     </maybe-script>
                 </div>
+
+                <p>There will also be 4 errors in the console for each element (which remain hidden).</p>
             </div>
         </div>
     </div>
