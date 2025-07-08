@@ -27,7 +27,7 @@
     </p>
 
     <p>
-        These per-element overrides can be defined by setting the  <code>src</code> attribute on each <code>&lt;maybe-script&gt;</code> tag.
+        These per-element overrides can be defined by setting the  <code>expect</code> attribute on each <code>&lt;maybe-script&gt;</code> tag.
     </p>
 
     <div class="test-case">
@@ -38,7 +38,7 @@
                 <h3 class="test-case__column-heading">Then the box below should contain something</h3 class="test-case__column-heading">
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/other.js" on:success="show">
+                    <maybe-script expect="/other.js" on:success="show">
                         <div>
                             ✅
                         </div>
@@ -50,7 +50,7 @@
                 <h3 class="test-case__column-heading">Then the box below should be empty</h3 class="test-case__column-heading">
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/other.js" on:success="hide">
+                    <maybe-script expect="/other.js" on:success="hide">
                         <div>
                             ❌
                         </div>
@@ -68,7 +68,7 @@
                 <h3 class="test-case__column-heading">Then the box below should contain something</h3 class="test-case__column-heading">
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/does-not-exist.js" on:failure="show">
+                    <maybe-script expect="/does-not-exist.js" on:failure="show">
                         <div>
                             ✅
                         </div>
@@ -80,7 +80,7 @@
                 <h3 class="test-case__column-heading">Then the box below should be empty</h3 class="test-case__column-heading">
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/does-not-exist.js" on:failure="hide">
+                    <maybe-script expect="/does-not-exist.js" on:failure="hide">
                         <div>
                             ❌
                         </div>

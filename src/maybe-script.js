@@ -261,11 +261,11 @@ class MaybeScript extends HTMLElement {
     /**
      * Get the expected script URL for this element.
      *
-     * If the element has a `src` attribute, that is used.
+     * If the element has a `expect` attribute, that is used.
      * Otherwise, the default expected script URL of the controller is used.
      */
     get_expected_script_url() {
-        let expected_script_url = this.getAttribute("src")
+        let expected_script_url = this.getAttribute("expect")
         if (!expected_script_url) {
             expected_script_url = this.controller.default_expected_script_url
         }

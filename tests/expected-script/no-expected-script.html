@@ -104,7 +104,7 @@
                 <h3 class="test-case__column-heading">And then the box below should contain something</h3>
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/other.js" on:success="show">
+                    <maybe-script expect="/other.js" on:success="show">
                         <div>
                             ✅
                         </div>
@@ -116,7 +116,7 @@
                 <h3 class="test-case__column-heading">And then the box below should be empty</h3>
 
                 <div class="test-case__output-box">
-                    <maybe-script src="/other.js" on:success="hide">
+                    <maybe-script expect="/other.js" on:success="hide">
                         <div>
                             ❌
                         </div>
