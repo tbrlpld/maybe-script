@@ -222,18 +222,37 @@ class MaybeScript extends HTMLElement {
 
         this.controller = get_controller_or_throw()
         this.wait_max = 3000
+    }
+
+    connectedCallback() {
+        console.debug("Maybe-script element connected", this)
 
         // If we can't determine the expected script URL for this element,
         // there is nothing useful this element can do.
         if (!this.is_expected_script_url_known()) {
             throw new Error("No expected script URL known for element. Define a default or set it on the element.")
         }
+
+        // Set initial visibility.
+        this.set_initial_visibility()
+
+        // Create a cut-off point for how long we wait for the loading state of the
+        // expected script to be reported. The element can be configured to a
+        // specific visibility at the cut-off time. By default, the visibility of
+        // the failure case is used.
+        this.set_up_maximum_wait_time_for_expected_script_loading()
+
+        // Let the controller know of this element, so that the controller can
+        // inform the element once the expected script loading state is known.
+        // TODO: Consider other options for this two way communication. This
+        //       two-way coupling feels dirty somehow.
+        this.controller.handle_maybe_script_element_connected(this)
     }
 
     /**
      * Check if the expected script URL for this element is known.
      *
-     * A the expected script URL can be either set on the element directly or the default.
+     * The expected script URL can be either set on the element directly or as the default on the script.
      */
     is_expected_script_url_known(){
         return this.get_expected_script_url() ? true : false
@@ -253,24 +272,6 @@ class MaybeScript extends HTMLElement {
         return expected_script_url
     }
 
-    connectedCallback() {
-        console.debug("Maybe-script element connected", this)
-
-        // Set initial visibility.
-        this.set_initial_visibility()
-
-        // Create a cut-off point for how long we wait for the loading state of the
-        // expected script to be reported. The element can be configured to a
-        // specific visibility at the cut-off time. By default, the visibility of
-        // the failure case is used.
-        this.set_up_maximum_wait_time_for_expected_script_loading()
-
-        // Let the controller know of this element, so that the controller can
-        // inform the element once the expected script loading state is known.
-        // TODO: Consider other options for this two way communication. This
-        //       two-way coupling feels dirty somehow.
-        this.controller.handle_maybe_script_element_connected(this)
-    }
 
     /*
      * Handle the status code of the loading of the expected script.
