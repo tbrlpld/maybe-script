@@ -7,6 +7,7 @@
     <title>Default expected script | maybe-script</title>
     <script src="http://localhost:8001/maybe-script.js"></script>
     <script src="/main.js"></script>
+    <script src="/other.js"></script>
 </head>
 <body>
     <a href=".">Back</a>
@@ -23,7 +24,7 @@
     </div>
 
     <div class="test-case">
-        <h2>Then the elements visibility depends on the initial state...</h2>
+        <h2>And given that the elements DON'T define an override, then the elements visibility depends on the initial state...</h2>
 
         <p>
             That is because the element immediately shows and there is no expected script to whose loading it could respond.
@@ -86,6 +87,36 @@
                 </div>
 
                 <p>There will also be 4 errors in the console for each element (which remain hidden).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-case">
+        <h2>But, given that the elements DO define an override, then element's visibility depends on its configuration...</h2>
+
+        <div class="test-case__columns-container">
+            <div class="test-case__column">
+                <h3 class="test-case__column-heading">And then the box below should contain something</h3>
+
+                <div class="test-case__output-box">
+                    <maybe-script src="/other.js" on:success="show">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+
+            <div class="test-case__column">
+                <h3 class="test-case__column-heading">And then the box below should be empty</h3>
+
+                <div class="test-case__output-box">
+                    <maybe-script src="/other.js" on:success="hide">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                </div>
             </div>
         </div>
     </div>
