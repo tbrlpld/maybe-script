@@ -1,0 +1,56 @@
+@media (prefers-color-scheme: dark) {
+    html {
+        background-color: black;
+        color: white;
+    }
+}
+
+body {
+    padding: 2rem 4rem;
+}
+
+a {
+    text-decoration: underline;
+
+    &:hover {
+        text-decoration: dotted underline;
+    }
+
+}
+
+@media (prefers-color-scheme: dark) {
+    a,
+    a:visited {
+        color: white;
+        background-color: black;
+    }
+}
+
+p {
+    max-width: 80ch;
+}
+
+
+.test-case {
+}
+
+.test-case__columns-container {
+    display: flex;
+    justify-content: start;
+    align-content: start;
+    gap: 4rem;
+}
+
+.test-case__column {
+    flex: 1;
+}
+
+.test-case__column-heading {
+    margin-top: 0;
+}
+
+.test-case__output-box {
+    border: 1px solid currentColor;
+    padding: 1rem;
+    min-height: 4rem;
+}

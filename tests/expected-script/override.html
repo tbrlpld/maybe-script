@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Default expected script | maybe-script</title>
+    <script src="http://localhost:8001/maybe-script.js" data-expect="/main.js"></script>
+    <script src="/main.js"></script>
+    <script src="/other.js"></script>
+    <script src="/does-not-exist.js"></script>  <!-- This simulates a script that fails to load. -->
+</head>
+<body>
+    <a href=".">Back</a>
+
+    <h1>Given the maybe-script element overrides the expected script...</h1>
+
+    <p>
+        Sometimes, you have scripts that are only needed on certain pages.
+        E.g. if this feature needs a lot of JS, but not all users use this feature or visit pages with this feature.
+        To optimize your bundle size, you might split the feature into a separate file and only load it on the pages that need it.
+    </p>
+
+    <p>
+        On pages with that special feature, that load that separate script, you might also have elements that you only want to show or hide depending on the loading status of the feature script.
+        To allow that, each element can define a separate script URL as the expected script to use for only this element.
+    </p>
+
+    <p>
+        These per-element overrides can be defined by setting the <code>expect</code> attribute on each <code>&lt;maybe-script&gt;</code> tag.
+    </p>
+
+    <div class="test-case">
+        <h2>And given the override expected script loads successfully...</h2>
+
+        <div class="test-case__columns-container">
+            <div class="test-case__column">
+                <h3 class="test-case__column-heading">Then the box below should contain something</h3 class="test-case__column-heading">
+
+                <div class="test-case__output-box">
+                    <maybe-script expect="/other.js" on:success="show">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+
+            <div class="test-case__column">
+                <h3 class="test-case__column-heading">Then the box below should be empty</h3 class="test-case__column-heading">
+
+                <div class="test-case__output-box">
+                    <maybe-script expect="/other.js" on:success="hide">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-case">
+        <h2>And given the override expected script fails to load...</h2>
+
+        <div class="test-case__columns-container">
+            <div class="test-case__column">
+                <h3 class="test-case__column-heading">Then the box below should contain something</h3 class="test-case__column-heading">
+
+                <div class="test-case__output-box">
+                    <maybe-script expect="/does-not-exist.js" on:failure="show">
+                        <div>
+                            ✅
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+
+            <div class="test-case__column">
+                <h3 class="test-case__column-heading">Then the box below should be empty</h3 class="test-case__column-heading">
+
+                <div class="test-case__output-box">
+                    <maybe-script expect="/does-not-exist.js" on:failure="hide">
+                        <div>
+                            ❌
+                        </div>
+                    </maybe-script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

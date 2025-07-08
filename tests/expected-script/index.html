@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Expected script | maybe-script</title>
+    <script src="http://localhost:8001/maybe-script.js" data-expect="/main.js"></script>
+    <script src="/main.js"></script>
+</head>
+<body>
+    <a href="..">Back</a>
+
+    <h1>Expected script</h1>
+
+    <p>
+        For maybe-script to be able to respond to the loading state of a script,
+        we need to tell it which script to check the loading state for.
+        This is done by setting the <code>data-expect</code> attribute on the <code>&lt;script&gt;</code> tag that loads maybe-script.
+    </p>
+
+    <p>
+        Alternatively, each <code>&lt;maybe-script&gt;</code> element can define its own expected script with the <code>expect</code> attribute.
+    </p>
+
+    <ul>
+        <li>
+            <a href="default-success.html">Default loads successfully</a>
+        </li>
+
+        <li>
+            <a href="default-failure.html">Default fails to load</a>
+        </li>
+
+        <li>
+            <a href="override.html">Per-element overrides of the expected script</a>
+        </li>
+
+        <li>
+            <a href="no-expected-script.html">No expected script defined</a>
+        </li>
+    </ul>
+</body>
+</html>
