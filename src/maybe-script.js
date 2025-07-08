@@ -165,10 +165,7 @@ class Controller {
     register_maybe_script_element(maybe_script_element) {
         console.debug("Registering maybe-script element", maybe_script_element)
 
-        const expected_script_url = this.get_expected_script_url_for_maybe_script_element(maybe_script_element)
-        if (!expected_script_url) {
-            throw Error("No expected script URL found for element. Define default or on element.")
-        }
+        const expected_script_url = maybe_script_element.get_expected_script_url()
 
         // Convert the script URL to an absolute URL.
         // This is needed because the performance entries are reported for absolute URLs.
@@ -191,20 +188,6 @@ class Controller {
             entry = new RegisterEntry()
         }
         return entry
-    }
-
-    /*
-     * Get the expected script URL from the maybe-script element.
-     *
-     * If the maybe-script element has a `src` attribute, that is used.
-     * Otherwise, the default expected script URL of this controller is used.
-     */
-    get_expected_script_url_for_maybe_script_element(maybe_script_element) {
-        let expected_script_url = maybe_script_element.getAttribute("src")
-        if (!expected_script_url) {
-            expected_script_url = this.default_expected_script_url
-        }
-        return expected_script_url
     }
 
     /*
@@ -239,6 +222,35 @@ class MaybeScript extends HTMLElement {
 
         this.controller = get_controller_or_throw()
         this.wait_max = 3000
+
+        // If we can't determine the expected script URL for this element,
+        // there is nothing useful this element can do.
+        if (!this.is_expected_script_url_known()) {
+            throw new Error("No expected script URL known for element. Define a default or set it on the element.")
+        }
+    }
+
+    /**
+     * Check if the expected script URL for this element is known.
+     *
+     * A the expected script URL can be either set on the element directly or the default.
+     */
+    is_expected_script_url_known(){
+        return this.get_expected_script_url() ? true : false
+    }
+
+    /**
+     * Get the expected script URL for this element.
+     *
+     * If the element has a `src` attribute, that is used.
+     * Otherwise, the default expected script URL of the controller is used.
+     */
+    get_expected_script_url() {
+        let expected_script_url = this.getAttribute("src")
+        if (!expected_script_url) {
+            expected_script_url = this.controller.default_expected_script_url
+        }
+        return expected_script_url
     }
 
     connectedCallback() {
