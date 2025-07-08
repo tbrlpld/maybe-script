@@ -5,6 +5,10 @@
     }
 }
 
+body {
+    padding: 2rem 4rem;
+}
+
 a {
     text-decoration: underline;
 
